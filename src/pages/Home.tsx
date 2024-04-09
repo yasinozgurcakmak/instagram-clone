@@ -1,7 +1,9 @@
+import { useSelector } from "react-redux";
 import Login from "../components/block/Login";
+import { RootState } from "../store";
 const Home = () => {
-    
-    if(!localStorage.getItem("token")) return <Login/>
+    const user = useSelector((state: RootState) => state.userSlice)
+    if(user.session === undefined) return <Login/>
     return (
         <div>
             Home
