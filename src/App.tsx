@@ -9,6 +9,9 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./store/user";
 import { RootState } from "./store";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.userSlice)

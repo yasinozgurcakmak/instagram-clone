@@ -8,6 +8,11 @@ import { registerSchema } from "../validation/auth";
 import supabase from "../config/supabase";
 import { toast } from "react-toastify";
 
+import footer from "../assets/login-footer.png";
+import logo_text from "../assets/logo_text_dark.png";
+import app_store from "../assets/app_store.png";
+import play_store from "../assets/play_store.png";
+
 interface ValuesProps {
     email: string;
     name: string;
@@ -52,7 +57,7 @@ const Register = () => {
             </Helmet>
             <div className="w-[350px] flex flex-col gap-y-3 text-center bg-white border p-5">
                 <a href="/" className="flex justify-center ">
-                    <img className="h-[51px]" src="/logo_text.png" alt="" />
+                    <img className="h-[51px]" src={logo_text} alt="" />
                 </a>
                 <p className="text-gray-400 font-semibold">Sign up to see photos and videos from your friends. </p>
                 <Button onClick={() => { }}><IoLogoFacebook className="text-xl" /> Log in with Facebook </Button>
@@ -76,12 +81,12 @@ const Register = () => {
             <div className="text-center ">
                 <p className="mt-5">Get the app.</p>
                 <div className="flex gap-5">
-                    <img src="/app_store.png" alt="App Store" className="w-[136px] h-10 my-[10px]" />
-                    <img src="/play_store.png" alt="Play Store" className="w-[136px] h-10 my-[10px]" />
+                    <img src={app_store} alt="App Store" className="w-[136px] h-10 my-[10px]" />
+                    <img src={play_store} alt="Play Store" className="w-[136px] h-10 my-[10px]" />
                 </div>
             </div>
             <div>
-                <img src="/login-footer.png" alt="" />
+                <img src={footer} alt="Footer" />
             </div>
         </div>
     );

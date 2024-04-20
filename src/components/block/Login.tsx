@@ -9,19 +9,14 @@ import supabase from "../../config/supabase";
 import { toast } from "react-toastify";
 import { setUser } from "../../store/user";
 import { useDispatch } from "react-redux";
+import app_store from "../../assets/app_store.png";
+import play_store from "../../assets/play_store.png";
+import logo_text from "../../assets/logo_text_dark.png";
+import footer from "../../assets/login-footer.png";
 const Login = () => {
     const ref = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch()
-    async function signInWithFacebook() {
-        const { data, error } = await supabase.auth.signInWithOAuth({
-          provider: 'facebook',
-        })
-        if(error){
-          toast.error(error.message)
-        }
-        // dispatch(setUser(data))
-        console.log(data)
-      }
+
 	useEffect(() => {
         const images = ref?.current?.querySelectorAll('img'), total = images?.length ?? 0 
         let current:number = 0;
@@ -79,9 +74,9 @@ const Login = () => {
 
                     <div className="bg-white border px-[40px] pt-10 pb-6">
                         <a href="/" className="flex justify-center mb-8">
-                            <img className="h-[51px]" src="/logo_text.png" alt=""/>
+                            <img className="h-[51px]" src={logo_text} alt=""/>
                         </a>
-                        <form className="flex flex-col gap-y-1.5">
+                        <div className="flex flex-col gap-y-1.5">
                             <Input name="email" placeholder="Phone number, username or email" value={values.email} onChange={handleChange}  error={errors.email}/>
                             <Input type="password" name="password"  placeholder="Password"   value={values.password} onChange={handleChange} error={errors.password}/>
                             <Button onClick={() => handleSubmit()} disable={!isValid} submitting={isSubmitting} >Log In</Button>
@@ -90,14 +85,14 @@ const Login = () => {
                                 <span className="px-4 text-[13px] text-gray-500 font-semibold">OR</span>
                                 <div className="h-px bg-gray-300 flex-1"/>
                             </div>
-                            <Link to="#" onClick={() => signInWithFacebook()} className="flex justify-center mb-2.5 items-center gap-x-2 text-sm font-semibold text-facebook">
+                            <Link to="#" onClick={() => {}} className="flex justify-center mb-2.5 items-center gap-x-2 text-sm font-semibold text-facebook">
                                 <AiFillFacebook size={20}/>
                                 Log in with Facebook
                             </Link>
                             <Link to="#" className="text-xs flex items-center justify-center text-link">
                                 Forgot password?
                             </Link>
-                        </form>
+                        </div>
                     </div>
 
                     <div className="bg-white border p-4 text-sm text-center">
@@ -105,14 +100,14 @@ const Login = () => {
                     </div>
                     <p className="text-[14px] mt-3 text-center">Download App</p>
                     <div className="flex justify-center gap-3">
-                        <img src="/app_store.png" alt="App Store"   className="w-[136px] h-10 my-[10px]" />
-                        <img src="/play_store.png" alt="Play Store" className="w-[136px] h-10 my-[10px]"/>
+                        <img src={app_store} alt="App Store"   className="w-[136px] h-10 my-[10px]" />
+                        <img src={play_store} alt="Play Store" className="w-[136px] h-10 my-[10px]"/>
                     </div>
                 </div>
                 
             </div>
             <div>
-                <img src="/login-footer.png" alt="" />
+                <img src={footer} alt="Footer" />
             </div>
         </div>
     );
