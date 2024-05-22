@@ -1,10 +1,20 @@
+import supabase from "../../config/supabase";
+import { useQuery } from "react-query";
+import { VscLoading } from "react-icons/vsc";
+import { toast } from "react-toastify";
 import Post from "./Post";
-const PostWrapper = () => {
+import { PostType } from "../../types";
 
+const PostWrapper = () => {
+    const { data, isLoading, refetch } = useQuery("posts", async () => {
+        const { data, error } = await supabase.from("posts").select("*").order("created_at", { ascending: false })
+        if (error) toast.error("Failed to fetch posts")
+        return data
+    })
     return (
         <div className="text-white">
-            <Post/>
-            <Post/>
+            {isLoading && <VscLoading className="animate-spin" />}
+            {data && data.map((post: PostType) => <Post key={post.id} refetch={refetch} post={post} />)}
         </div>
     );
 };

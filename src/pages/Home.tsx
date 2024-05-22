@@ -7,7 +7,7 @@ const Home = () => {
     const user = useSelector((state: RootState) => state.userSlice)
     if(user.session === null) return <Login/>
     return (
-        <section className="bg-black flex gap-20">
+        <section className="bg-black flex">
             <Menu/>
             <Content/>
         </section>

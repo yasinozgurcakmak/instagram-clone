@@ -4,7 +4,11 @@ import sidebar_menu from "../../assets/sidebar_menu.png"
 import Button from '../base/Button';
 import { faker } from '@faker-js/faker';
 import { generateUsername, textTruncate } from '../../utils';
+import { User } from '../../types/user';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 const SideBar = () => {
+    const user : {session: User | null}  = useSelector((state: RootState) => state.userSlice);
     const [suggestedUsers, setSuggestedUsers] = useState<Array<{ userName: string, avatar: string }>>([]);
     useEffect(() => {
         const newStories = Array.from({ length: 5 }, () => ({
@@ -19,8 +23,8 @@ const SideBar = () => {
                 <div className='flex gap-5'>
                     <img src={defaultImage} alt="Profile Image" className='rounded-full w-10 h-10' />
                     <div>
-                        <h2 className="font-bold ">yozgurcakmak</h2>
-                        <p className="text-gray-500">Yasin Özgür Çakmak</p>
+                        <h2 className="font-bold ">{user && user?.session?.user.user_metadata.username}</h2>
+                        <p className="text-gray-500">{user && user?.session?.user.user_metadata.name}</p>
                     </div>
                 </div>
                 <Button onClick={() => { }} variant='transparent' size='max' className='!text-brand text-xs'>Switch</Button>

@@ -6,30 +6,33 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import supabase from "./config/supabase";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUser } from "./store/user";
-import { RootState } from "./store";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { QueryClient, QueryClientProvider} from 'react-query'
+
 
 function App() {
   const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.userSlice)
   const checkSession = async () => {
     const user = await supabase.auth.getSession()
-    dispatch(setUser(user))
+    dispatch(setUser(user.data))
   }
-  useEffect(() => { checkSession() }, [user])
+  useEffect(() => { checkSession() }, [])
+  const queryClient = new QueryClient()
   return (
     <main>
       <Helmet>
         <title>Instagram</title>
       </Helmet>
       <ToastContainer />
-      <Routes>
-        <Route path="/" element={<Home />}></Route>
-        <Route path="accounts/emailsignup" element={<Register />} />
-      </Routes>
+      <QueryClientProvider client={queryClient}>
+        <Routes>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="accounts/emailsignup" element={<Register />} />
+        </Routes>
+      </QueryClientProvider>
     </main>
   )
 }

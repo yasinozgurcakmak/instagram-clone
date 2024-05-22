@@ -13,6 +13,7 @@ import app_store from "../../assets/app_store.png";
 import play_store from "../../assets/play_store.png";
 import logo_text from "../../assets/logo_text_dark.png";
 import footer from "../../assets/login-footer.png";
+
 const Login = () => {
     const ref = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch()
@@ -77,8 +78,8 @@ const Login = () => {
                             <img className="h-[51px]" src={logo_text} alt=""/>
                         </a>
                         <div className="flex flex-col gap-y-1.5">
-                            <Input name="email" placeholder="Phone number, username or email" value={values.email} onChange={handleChange}  error={errors.email}/>
-                            <Input type="password" name="password"  placeholder="Password"   value={values.password} onChange={handleChange} error={errors.password}/>
+                            <Input name="email" placeholder="Phone number, username or email" value={values.email} onChange={handleChange} error={errors.email} variant="primary"/>
+                            <Input type="password" name="password"  placeholder="Password"   value={values.password} onChange={handleChange} error={errors.password} variant="primary"/>
                             <Button onClick={() => handleSubmit()} disable={!isValid} submitting={isSubmitting} >Log In</Button>
                             <div className="flex items-center my-2.5 mb-3.5"> 
                                 <div className="h-px bg-gray-300 flex-1"/>

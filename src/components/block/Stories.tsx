@@ -16,7 +16,7 @@ const Stories = () => {
     }, [])
 
     return (
-        <ul className="flex items-center justify-center h-28 pl-5 mt-16 ">
+        <ul className="flex items-center justify-center mx-auto w-[550px] lg:w-full h-28 pl-5 mt-16 ">
             <Swiper
                 spaceBetween={50}
                 slidesPerView={10}
