@@ -1,9 +1,10 @@
-import supabase from "../../config/supabase";
 import { useQuery } from "react-query";
-import { VscLoading } from "react-icons/vsc";
 import { toast } from "react-toastify";
+import { VscLoading } from "react-icons/vsc";
+import supabase from "../../config/supabase";
 import Post from "./Post";
 import { PostType } from "../../types";
+
 
 const PostWrapper = () => {
     const { data, isLoading, refetch } = useQuery("posts", async () => {

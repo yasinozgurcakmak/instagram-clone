@@ -13,14 +13,14 @@ interface ButtonType {
     refs?: React.RefObject<HTMLButtonElement>;
 }
 const Button = ({ children, className, onClick, disable, submitting, variant = "primary", size = "lg", type = "submit", refs }: ButtonType) => {
-    const style = classNames(" flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed h-[30px] mt-1 rounded font-medium text-white text-sm",
+    const style = classNames(" flex items-center justify-center cursor-pointer gap-3 disabled:opacity-50 disabled:cursor-not-allowed h-[30px] mt-1 rounded font-medium text-white text-sm",
         {
             "w-full": size === "lg",
-            "max": size === "max",
+            "w-max px-5 py-2": size === "max",
         },
         {
             "bg-brand hover:to-brandDark": variant === "primary",
-            "bg-gray-300": variant === "secondary",
+            "bg-secondary text-black": variant === "secondary",
             "bg-transparent text-gray-500 hover:text-gray-700": variant === "transparent",
         }, className
     )

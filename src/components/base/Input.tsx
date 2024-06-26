@@ -1,13 +1,14 @@
-import classNames from "classnames";
 import React, { useState, ChangeEvent } from "react";
+import classNames from "classnames";
 
 interface IInputProps {
   name: string;
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  value: string | number;
+  label?: string,
   type?: "text" | "password" | "email" | "number" | "textarea";
   className?: string;
-  value: string | number;
   variant?: "primary" | "secondary" | "transparent";
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   refs?: React.RefObject<HTMLInputElement>;
@@ -16,6 +17,7 @@ interface IInputProps {
 
 const Input = ({
   name,
+  label,
   type,
   placeholder,
   className,
@@ -36,8 +38,9 @@ const Input = ({
   );
   return (
     <div className="bg-transparent w-full">
+      {label && <label htmlFor={name} className="text-xs text-white mt-3 mb-2 block">{label}</label>}
       <div className={inputStyle}>
-        {inputType !== "textarea" && <input type={inputType} name={name} placeholder={placeholder} value={value} onBlur={onBlur} onChange={onChange} ref={refs} className="px-2 outline-none text-xs w-full h-[38px] bg-inherit " />}
+        {inputType !== "textarea" && <input type={inputType} name={name} placeholder={placeholder} value={value} onBlur={onBlur} onChange={onChange} ref={refs} className="px-2 outline-none text-xs w-full h-[38px] bg-inherit "/>}
         {inputType === "textarea" && <textarea name={name} placeholder={placeholder} value={value} onChange={onChange} className="px-2 outline-none text-xs w-full h-full bg-inherit text-white" />}
         {type === "password" && (
           <button type="button" onClick={handleToggleType} className="flex items-center text-sm font-medium pr-2 bg-transparent">

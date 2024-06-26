@@ -2,27 +2,26 @@ import { useEffect, useState, useRef } from "react";
 import moment from "moment";
 import { uid } from 'uid';
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useMutation, useQuery } from "react-query";
+import { useFormik } from "formik";
+import { toast } from "react-toastify";
 import { FaRegHeart, FaHeart, FaRegComment } from "react-icons/fa";
 import { LuSend } from "react-icons/lu";
 import { FaRegBookmark, FaBookmark } from "react-icons/fa6";
-
 import { SlOptions } from "react-icons/sl";
 import { MdDelete } from "react-icons/md";
-
-import DefaultProfile from "../../assets/profile.jpg"
 import Button from "../base/Button";
 import Input from "../base/Input";
+import Modal from "../base/Modal";
 import { PostType } from "../../types";
+import { User } from "../../types/user";
 import { changeToImageAdress } from "../../utils";
 import supabase from "../../config/supabase";
-import { User } from "../../types/user";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { toast } from "react-toastify";
-import { useMutation, useQuery } from "react-query";
-import { useFormik } from "formik";
 import { commentValidation } from "../../validation/post";
-import Modal from "../base/Modal";
+import { RootState } from "../../store";
+
+import DefaultProfile from "../../assets/profile.jpg";
 
 interface PostProps {
     post: PostType,
@@ -38,7 +37,6 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
     const [showModal, setShowModal] = useState<boolean>(false);
     const closeModal = () => setShowModal(false);
     const incrementComment = () => { setCommentCount(commentCount + 3) }
-
     const currentUser: { session: User | null } = useSelector((state: RootState) => state.userSlice);
     const focusInput = () => { commentRef.current?.focus() }
     const fetchLikes = async () => {
@@ -53,12 +51,14 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
     }
 
     const [imageURL, setImageURL] = useState<string | null>(null)
+    const [profileImageURL, setProfileImageURL] = useState<string | null>(null)
     const getImageURL = async () => {
-        const imageAdress = await changeToImageAdress(image)
+        const imageAdress = await changeToImageAdress({table: "posts", image})
+        const profileImageAdress = await changeToImageAdress({table: "profile-image", image: user.profile_image })
         setImageURL(imageAdress)
+        setProfileImageURL(profileImageAdress)
     }
     useEffect(() => { fetchLikes(); getImageURL() }, [id, currentUser.session?.user.id])
-
 
     const { mutate: likeAction } = useMutation({
         mutationFn: async () => {
@@ -144,7 +144,7 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
     })
     const { mutate: deletePost } = useMutation({
         mutationFn: async (id: number) => {
-            const { error } = await supabase.from("posts").delete().eq("id", id);
+            const { error } = await supabase.from("posts" ).delete().eq("id", id);
             if (error) toast.error("Failed to delete post, try again later")
             toast.success("Post deleted successfully")
             refetch()
@@ -153,26 +153,26 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
     })
     return (
         <div>
-            <header className="flex justify-between py-5 w-[475px] ">
+            <header className="flex justify-between py-5">
                 <div className="flex">
-                    <img src={currentUser.session?.user.user_metadata?.profile_image || DefaultProfile} alt="Profile" className="w-7 h-7 mr-3 rounded-full" />
-                    {user && <Link to={"/"} className="mr-2">{user.username}</Link>} • <span className="ml-2">{moment(created_at).startOf('hour').fromNow()}</span>
+                    <img src={profileImageURL || DefaultProfile} alt="Profile" className="w-7 h-7 mr-3 rounded-full object-cover" />
+                    {user && <Link to={`/profile/${user.username}`} className="mr-2">{user.username}</Link>} • <span className="ml-2">{moment(created_at).startOf('minute').fromNow()}</span>
                 </div>
                 <div className="relative">
                     <Button onClick={() => setShowModal(!showModal)} variant="transparent" size="max"><SlOptions /></Button>
                     <Modal isOpen={showModal} onClose={closeModal}>
-                        <ul className="w-96 text-white  text-center">
+                        <ul className="w-96 text-white text-center">
                             <li className="py-4 border-b-slate-500 border-b-[1px]"><Link to={"/"} onClick={() => bookmarkFunction(id)}>Add to favorites</Link></li>
-                            <li className="py-4 border-b-slate-500 border-b-[1px]"><Link to={"/"}>Go to posts</Link></li>
-                            <li className="py-4 border-b-slate-500 border-b-[1px]"><Link to={"/"}>Copy link</Link></li>
-                            <li className="py-4 border-b-slate-500 border-b-[1px]"><Link to={"/"}>About this account</Link></li>
+                            <li className="py-4 border-b-slate-500 border-b-[1px] opacity-50"><Link to={"/"}>Go to posts</Link></li>
+                            <li className="py-4 border-b-slate-500 border-b-[1px] opacity-50"><Link to={"/"}>Copy link</Link></li>
+                            <li className="py-4 border-b-slate-500 border-b-[1px]"><Link to={`/profile/${user.username}`}>About this account</Link></li>
                             {currentUser.session?.user.id === user.user_id && <li className="py-4 border-b-slate-500 border-b-[1px]"><Link to={"/"} onClick={() => deletePost(id)}>Delete</Link></li>}
                             <li className="py-2 cursor-pointer" onClick={closeModal}>Cancel</li>
                         </ul>
                     </Modal>
                 </div>
             </header>
-            <div className="w-full">
+            <div className="w-full cursor-pointer" onDoubleClick={() => likeAction()}>
                 <img src={imageURL || ''} alt="Post Image" loading="lazy" className="w-full h-96 object-cover" />
             </div>
             <div className="py-5 ">
@@ -210,15 +210,7 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
                         </div>
 
                         {comment.user_id === currentUser?.session?.user.id && (
-                            <Button
-                                onClick={() => {
-                                    deleteComment(comment.id)
-                                }}
-                                className={`${!commentOwner[comment.id] ? "hidden" : ""}`}
-                                variant="transparent"
-                                size="max"
-                                refs={buttonRef}
-                            >
+                            <Button onClick={() => { deleteComment(comment.id) }} className={`${!commentOwner[comment.id] ? "hidden" : ""}`} variant="transparent" size="max" refs={buttonRef}>
                                 <MdDelete />
                             </Button>
                         )}

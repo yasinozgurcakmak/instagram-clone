@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { faker } from '@faker-js/faker';
 import Story from "../base/Story";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
 import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
 import "swiper/css/navigation";
+
 const Stories = () => {
     const [story, setStory] = useState<Array<{ name: string, avatar: string }>>([]);
     useEffect(() => {

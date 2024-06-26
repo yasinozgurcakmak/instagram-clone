@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
-import defaultImage from '../../assets/profile.jpg';
-import sidebar_menu from "../../assets/sidebar_menu.png"
-import Button from '../base/Button';
-import { faker } from '@faker-js/faker';
-import { generateUsername, textTruncate } from '../../utils';
-import { User } from '../../types/user';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { faker } from '@faker-js/faker';
+import Button from '../base/Button';
+import { changeToImageAdress, generateUsername, textTruncate } from '../../utils';
+import { User } from '../../types/user';
 import { RootState } from '../../store';
+import defaultImage from '../../assets/profile.jpg';
+import sidebar_menu from '../../assets/sidebar_menu.png';
+
 const SideBar = () => {
     const user : {session: User | null}  = useSelector((state: RootState) => state.userSlice);
     const [suggestedUsers, setSuggestedUsers] = useState<Array<{ userName: string, avatar: string }>>([]);
@@ -17,13 +19,22 @@ const SideBar = () => {
         }));
         setSuggestedUsers(newStories);
     }, [])
+
+    const [profileImageUrl, setProfileImageUrl] = useState<string>("");
+    const getImageURL = async () => {
+        const imageAdress = await changeToImageAdress({ table: "profile-image", image: user?.session?.user.user_metadata.profile_image })
+        setProfileImageUrl(imageAdress)
+    }
+    useEffect(() =>{
+        getImageURL();
+    },[user]) 
     return (
         <div className="w-[20rem] text-white">
             <div className='flex justify-between my-20'>
                 <div className='flex gap-5'>
-                    <img src={defaultImage} alt="Profile Image" className='rounded-full w-10 h-10' />
+                    <img src={profileImageUrl ? profileImageUrl : defaultImage} alt="Profile Image" className='w-10 h-10 rounded-full object-cover' />
                     <div>
-                        <h2 className="font-bold ">{user && user?.session?.user.user_metadata.username}</h2>
+                        {user && <h2 className="font-bold"><Link to={`/profile/${user?.session?.user.user_metadata.username}`}>{user?.session?.user.user_metadata.username}</Link></h2>}
                         <p className="text-gray-500">{user && user?.session?.user.user_metadata.name}</p>
                     </div>
                 </div>

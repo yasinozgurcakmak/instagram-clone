@@ -28,11 +28,10 @@ function toText(text: string | number | boolean | object) {
     return String(text)
 }
 
-async function changeToImageAdress(image: { id: string, path: string, fullPath: string }) {
-    const { data } = await supabase.storage.from('posts').getPublicUrl(image.path)
+async function changeToImageAdress({table, image}: {table: string, image: {id: string, path: string, fullPath: string} | any}) {
+    const { data } = await supabase.storage.from(table).getPublicUrl(image.path)
     return data.publicUrl
 }
-
 
 
 export { generateUsername, textTruncate, previewImage, toText, changeToImageAdress }

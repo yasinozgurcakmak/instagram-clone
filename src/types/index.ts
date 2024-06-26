@@ -8,6 +8,11 @@ interface PostType {
     user: {
         user_id: string;
         username: string;
+        profile_image: {
+            id: string;
+            fullPath: string;
+            path: string;
+        }
     };
     description: string;
     like?: { user_id:string,username:string}[] | undefined;
