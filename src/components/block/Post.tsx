@@ -16,7 +16,7 @@ import Input from "../base/Input";
 import Modal from "../base/Modal";
 import { PostType } from "../../types";
 import { User } from "../../types/user";
-import { changeToImageAdress } from "../../utils";
+import { changeToImageAdress, copyToClipboard } from "../../utils";
 import supabase from "../../config/supabase";
 import { commentValidation } from "../../validation/post";
 import { RootState } from "../../store";
@@ -36,14 +36,17 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
     const [commentCount, setCommentCount] = useState<number>(3);
     const [showModal, setShowModal] = useState<boolean>(false);
     const closeModal = () => setShowModal(false);
-    const incrementComment = () => { setCommentCount(commentCount + 3) }
-    const currentUser: { session: User | null } = useSelector((state: RootState) => state.userSlice);
     const focusInput = () => { commentRef.current?.focus() }
+    const currentUser: { session: User | null } = useSelector((state: RootState) => state.userSlice);
+    const postUrl = import.meta.env.VITE_URL + "/post/" + id;
+    
+    const commentsCount = comments?.length;
+    const incrementComment = () => { setCommentCount(commentsCount || commentCount) }
+    const decrementComment = () => { setCommentCount(3) }
+
     const fetchLikes = async () => {
         const { data, error } = await supabase.from("posts").select("like").eq("id", id).single()
-
         if (error) toast.error("Failed to fetch likes")
-
         if (data) {
             const isLiked = data.like.find((like: { user_id: string }) => like.user_id === currentUser.session?.user.id)
             setIsLiked(isLiked ? true : false)
@@ -70,7 +73,6 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
                 if (error) toast.error("Failed to unlike, try again later");
                 refetch()
             } else {
-
                 const { error } = await supabase.from("posts").update({ like: updatedLike }).eq("id", id)
                 if (error) toast.error("Failed to like, try again later")
                 refetch()
@@ -86,8 +88,10 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
             const { error } = await supabase.from("posts").update({ comments: updatedComments }).eq("id", id)
             if (error) toast.error("Failed to comment, try again later")
             refetch();
+            resetForm();
         }
     })
+
     const { mutate: deleteComment } = useMutation({
         mutationFn: async (commentId: string) => {
             const filteredComments = comments?.filter(item => item.id !== commentId);
@@ -102,12 +106,8 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
             comments: "",
         },
         validationSchema: commentValidation,
-        onReset() {
-            resetForm(({ values: { comments: "" } }))
-        },
         onSubmit: (values: { comments: string }) => mutate(values),
     })
-
 
     const [commentOwner, setCommentOwner] = useState<{ [commentId: string]: boolean }>({});
     const handleCommentHover = (commentId: string) => {
@@ -117,7 +117,6 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
     const handleCommentLeave = (commentId: string) => {
         setCommentOwner((prev) => ({ ...prev, [commentId]: false }));
     };
-
 
     const { data: bookmarkItem, refetch: bookmarkRefetch } = useQuery("bookmarks", async () => {
         const { data } = await supabase.from("bookmarks").select("*").eq("user", currentUser.session?.user.id).single();
@@ -149,7 +148,6 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
             toast.success("Post deleted successfully")
             refetch()
         }
-
     })
     return (
         <div>
@@ -162,11 +160,11 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
                     <Button onClick={() => setShowModal(!showModal)} variant="transparent" size="max"><SlOptions /></Button>
                     <Modal isOpen={showModal} onClose={closeModal}>
                         <ul className="w-96 text-white text-center">
-                            <li className="py-4 border-b-slate-500 border-b-[1px]"><Link to={"/"} onClick={() => bookmarkFunction(id)}>Add to favorites</Link></li>
-                            <li className="py-4 border-b-slate-500 border-b-[1px] opacity-50"><Link to={"/"}>Go to posts</Link></li>
-                            <li className="py-4 border-b-slate-500 border-b-[1px] opacity-50"><Link to={"/"}>Copy link</Link></li>
-                            <li className="py-4 border-b-slate-500 border-b-[1px]"><Link to={`/profile/${user.username}`}>About this account</Link></li>
-                            {currentUser.session?.user.id === user.user_id && <li className="py-4 border-b-slate-500 border-b-[1px]"><Link to={"/"} onClick={() => deletePost(id)}>Delete</Link></li>}
+                            <li className="py-4 border-b-slate-500 border-b-[1px] cursor-pointer"><Link to={"/"} onClick={() => bookmarkFunction(id)}>Add to favorites</Link></li>
+                            <li className="py-4 border-b-slate-500 border-b-[1px] cursor-pointer"><Link to={postUrl}>Go to posts</Link></li>
+                            <li className="py-4 border-b-slate-500 border-b-[1px] cursor-pointer" onClick={() =>copyToClipboard(postUrl)}>Copy link</li>
+                            <li className="py-4 border-b-slate-500 border-b-[1px] cursor-pointer"><Link to={`/profile/${user.username}`}>About this account</Link></li>
+                            {currentUser.session?.user.id === user.user_id && <li className="py-4 border-b-slate-500 border-b-[1px] cursor-pointer"><Link to={"/"} onClick={() => deletePost(id)}>Delete</Link></li>}
                             <li className="py-2 cursor-pointer" onClick={closeModal}>Cancel</li>
                         </ul>
                     </Modal>
@@ -187,37 +185,39 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
                     </div>
                 </div>
                 <p>{like ? like.length : 0} likes</p>
-                <p className="mt-1 my-2"><Link to={"/"} className="mr-1">{user.username}</Link> {description} </p>
+                <p className=" my-3 text-sm"><Link to={"/"} className="mr-1">{user.username}</Link> {description} </p>
 
-                {comments && comments.length > 3 && (
-                    <Button onClick={() => incrementComment()} variant="transparent" size="max">
-                        View all {comments.length} comments
-                    </Button>
+                {comments && comments.length > 3 && commentCount <= 3 && (
+                    <Button onClick={incrementComment} variant="transparent" size="max">View all {comments.length} comments</Button>
                 )}
+                
+                <div className="max-h-96 overflow-auto comments-scroolbar">
+                    {comments && comments.slice(0, commentCount).map((comment) => (
+                        <div
+                            key={comment.id}
+                            className="flex items-center justify-between h-6 cursor-pointer my-1 ml-2 relative text-sm"
+                            onMouseEnter={() => handleCommentHover(comment.id)}
+                            onMouseLeave={() => handleCommentLeave(comment.id)}
+                        >
+                            <div>
+                                <Link to={"/"} className="mr-2">
+                                    {comment.username}
+                                </Link>
+                                {comment.comment}
+                            </div>
 
-                {comments && comments.slice(0, commentCount).map((comment) => (
-                    <div
-                        key={comment.id}
-                        className="flex items-center justify-between h-6 cursor-pointer my-1 relative"
-                        onMouseEnter={() => handleCommentHover(comment.id)}
-                        onMouseLeave={() => handleCommentLeave(comment.id)}
-                    >
-                        <div>
-                            <Link to={"/"} className="mr-2">
-                                {comment.username}
-                            </Link>
-                            {comment.comment}
+                            {comment.user_id === currentUser?.session?.user.id && (
+                                <Button onClick={() => { deleteComment(comment.id) }} className={`${!commentOwner[comment.id] ? "hidden" : ""}`} variant="transparent" size="max" refs={buttonRef}>
+                                    <MdDelete />
+                                </Button>
+                            )}
                         </div>
+                    ))}
+                </div>
 
-                        {comment.user_id === currentUser?.session?.user.id && (
-                            <Button onClick={() => { deleteComment(comment.id) }} className={`${!commentOwner[comment.id] ? "hidden" : ""}`} variant="transparent" size="max" refs={buttonRef}>
-                                <MdDelete />
-                            </Button>
-                        )}
-                    </div>
-                ))}
-
-
+                {comments && comments.length > 3 && commentCount > 3 && (
+                    <Button onClick={decrementComment} variant="transparent" size="max">Hide comments</Button>
+                )}
                 <div className="flex w-full justify-between">
                     <Input name="comments" placeholder="Add a comment..." onChange={handleChange} value={values.comments} variant="transparent" refs={commentRef} />
                     <Button onClick={() => handleSubmit()} disable={values.comments.length < 3} variant="transparent" size="max">Post</Button>

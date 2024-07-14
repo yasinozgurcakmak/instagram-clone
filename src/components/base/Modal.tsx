@@ -45,7 +45,7 @@ const Modal: React.FC<ModalProps> = ({ children, isOpen = false, onClose }) => {
   return ReactDOM.createPortal(
     <ModalContainer>
       <Overlay onClick={onClose} />
-      <div className="bg-[#353535]  rounded-lg shadow-2xl  min-h-max ">
+      <div className="bg-[#353535] rounded-lg shadow-2xl w-max min-h-max ">
         {children}
       </div>
     </ModalContainer>,

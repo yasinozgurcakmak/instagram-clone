@@ -14,12 +14,13 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import QRPage from "./pages/QRPage";
 import favicon from "./assets/logo.svg";
+import PostPage from "./pages/PostPage";
 
 function App() {
   const dispatch = useDispatch();
   const checkSession = async () => {
-    const user = await supabase.auth.getSession()
-    dispatch(setUser(user.data))
+    const currentUser = await supabase.auth.getSession()
+    dispatch(setUser(currentUser.data))
   }
   useEffect(() => { checkSession() }, [])
   const queryClient = new QueryClient()
@@ -35,7 +36,8 @@ function App() {
           <Route path="/" element={<Home />}></Route>
           <Route path="accounts/emailsignup" element={<Register />} />
           <Route path="profile/:username" element={<Profile />} />          
-          <Route path="qr" element={<QRPage />} />          
+          <Route path="post/:id" element={<PostPage />} />          
+          <Route path="qr/:username" element={<QRPage />} />          
         </Routes>
       </QueryClientProvider>
     </main>

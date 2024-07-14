@@ -19,58 +19,72 @@ import profileImage from "../assets/profile.jpg";
 import { changeToImageAdress } from "../utils";
 import { RootState } from "../store";
 import { User } from "../types/user";
+import ProfilePosts from "../components/block/ProfilePosts";
 
 const Profile = () => {
   const { username } = useParams();
-  const user: { session: User | null } = useSelector((state: RootState) => state.userSlice);
+  const currenUser: { session: User | null } = useSelector((state: RootState) => state.userSlice);
   const [checkOwnProfile, setCheckOwnProfile] = useState(false);
   const [editShowModal, setEditShowModal] = useState(false);
   const [editSettingsModal, setSettingsShowModal] = useState(false);
   const [profileImageUrl, setProfileImageUrl] = useState("");
 
-  const closeEditModal = () => setEditShowModal(false);
-  const closeSettingsModal = () => setSettingsShowModal(false);
+  const closeEditModal = () => setEditShowModal(false)
+  const closeSettingsModal = () => setSettingsShowModal(false)
 
   const { data, refetch, isLoading, isError } = useQuery("user", async () => {
     const { data: userData, error } = await supabase.from("users").select("*").eq("username", username).single();
-    if(error) toast.error("Failed to fetch user data, please try again later");
+    if (error) {
+      toast.error("Failed to fetch user data, please try again later");
+    }
     return userData;
   });
-  const checkOwnProfileFunction = () => setCheckOwnProfile(user.session?.user.user_metadata.username === data?.username);
 
-  const handleSaveProfileImage = async (e: any) => {
+  const { data: posts, refetch: refetchPosts, isLoading: isLoadingPosts } = useQuery("posts", async () => {
+    if(data){
+      const { data: postsData, error } = await supabase.from("posts").select("*").eq("user_id", data?.user_id).order("created_at", { ascending: false });
+      if (error) {
+        toast.error("Failed to fetch posts data, please try again later");
+      }
+      return postsData;
+    }
+  });
+
+  const checkOwnProfileFunction =() => { setCheckOwnProfile(currenUser.session?.user.user_metadata.username === data?.username) };
+
+  const getImageURL =async () => {
+    if (data?.profile_image) {
+      const imageAdress = await changeToImageAdress({ table: "profile-image", image: data.profile_image });
+      setProfileImageUrl(imageAdress);
+    }
+  };  
+
+  const handleSaveProfileImage = async (e:any) => {
     const file = e.target.files?.[0];
     if (file) {
-      const { data: image } = await supabase.storage.from("profile-image").upload(`${user?.session?.user.id}/${nanoid()}`, file);
-
+      const { data: image } = await supabase.storage.from("profile-image").upload(`${currenUser?.session?.user.id}/${nanoid()}`, file);
       if (image) {
-        const { error: updateError } = await supabase.from("users").update({ profile_image: image }).eq("user_id", user?.session?.user.id);
-
+        const { error: updateError } = await supabase.from("users").update({ profile_image: image }).eq("user_id", currenUser?.session?.user.id);
         await supabase.auth.updateUser({ data: { profile_image: image } });
-
         if (updateError) {
           toast.error("Failed to update profile image, please try again later");
         } else {
           toast.success("Profile image updated successfully");
+          setTimeout(() => { window.location.reload() }, 2000);
         }
       }
     }
   };
 
-  const getImageURL = async () => {
-    if (data?.profile_image) {
-      const imageAdress = await changeToImageAdress({ table: "profile-image", image: data.profile_image });
-      setProfileImageUrl(imageAdress);
-    }
-  };
-  
   useEffect(() => {
     if (data?.profile_image) {
       getImageURL();
     }
     refetch();
+    refetchPosts()
     checkOwnProfileFunction();
-  }, [username, data?.profile_image]);
+  }, [username, data]);
+
   return (
     <section className="bg-black flex text-white">
       {data && (
@@ -81,55 +95,63 @@ const Profile = () => {
         </Helmet>
       )}
       <Menu />
-      
-      {
-        isError? <p>Sayfa YÜklenemedi</p>: isLoading? <p>Yükleniyor</p>:
-        <div className="w-3/6 mx-auto py-10 px-16 ">
-        <div className="flex">
-          <label htmlFor="profileImageInput" className={`relative cursor-pointer ${checkOwnProfile && "group hover:opacity-35" }`}>
-            <img src={profileImageUrl ? profileImageUrl  : profileImage } alt={data?.name} className="rounded-full w-36 h-36 object-cover" />
-            {checkOwnProfile && (<input type="file" className="hidden" id="profileImageInput" name="profileImageInput" onChange={handleSaveProfileImage}/>)}
-            <FaPlusCircle className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-1/6 h-1/6 rounded-full text-slate-600 hidden group-hover:block group-hover:opacity-100 transition-all " />
-          </label>
-          <div className="lg:ml-24">
-            <div className=" lg:flex lg:items-center h-10">
-              <h1>{data?.username}</h1>
+      {isError ? (
+        <p>Sayfa Yüklenemedi</p>
+      ) : isLoading ? (
+        <p>Yükleniyor</p>
+      ) : (
+        <div className="w-3/6 mx-auto py-10 px-16">
+          <div className="flex">
+            <label htmlFor="profileImageInput" className={`relative cursor-pointer ${checkOwnProfile && "group hover:opacity-35"}`}>
+              <img src={profileImageUrl ? profileImageUrl : profileImage} alt={data?.name} className="rounded-full w-36 h-36 object-cover" />
               {checkOwnProfile && (
+                <input type="file" className="hidden" id="profileImageInput" name="profileImageInput" onChange={handleSaveProfileImage} />
+              )}
+              <FaPlusCircle className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-1/6 h-1/6 rounded-full text-slate-600 hidden group-hover:block group-hover:opacity-100 transition-all" />
+            </label>
+            <div className="lg:ml-24">
+              <div className="lg:flex lg:items-center h-10">
+                <h1>{data?.username}</h1>
+                {checkOwnProfile && (
                   <Button onClick={() => setEditShowModal(!editShowModal)} variant="secondary" size="max" className="ml-5">
                     Edit Profile
                   </Button>
-              )}
-              
-              {!checkOwnProfile && (
-                <Button onClick={() =>{}} variant="secondary" size="max" className="ml-5">
-                  Follow
+                )}
+                {!checkOwnProfile && (
+                  <Button onClick={() => {}} variant="secondary" size="max" className="ml-5">
+                    Follow
+                  </Button>
+                )}
+                <Button onClick={() => setSettingsShowModal(!editSettingsModal)} variant="transparent" size="max">
+                  <IoMdSettings className="text-xl" />
                 </Button>
-              )}
-               <Button onClick={() => setSettingsShowModal(!editSettingsModal)} variant="transparent" size="max">
-                <IoMdSettings className="text-xl" />
-              </Button>
-              <Modal isOpen={editShowModal} onClose={closeEditModal}>
-                <EditProfile refetch={refetch}/>
-              </Modal>
-              <Modal isOpen={editSettingsModal} onClose={closeSettingsModal}>
-                <ProfileSettings username={username} closeModal={closeSettingsModal}/>
-              </Modal> 
+                <Modal isOpen={editShowModal} onClose={closeEditModal}>
+                  <EditProfile refetch={refetch} />
+                </Modal>
+                <Modal isOpen={editSettingsModal} onClose={closeSettingsModal}>
+                  <ProfileSettings username={username} closeModal={closeSettingsModal} />
+                </Modal>
+              </div>
+              <div className="flex justify-between w-full my-5">
+                <p>{posts?.length} Post</p>
+                <p className="mx-5">0 following</p>
+                <p>0 followers</p>
+              </div>
+              <p className="mt-5">{data?.bio ? data.bio : "Bio not yet"}</p>
             </div>
-            <div className="flex justify-between w-full my-5">
-              <p>0 Post</p>
-              <p className="mx-5">0 following</p>
-              <p>0 followers</p>
-            </div>
-            <p className="mt-5">{data?.bio ? data.bio : "Bio not yet"}</p>
           </div>
+          {isLoadingPosts ? (
+            <p className="text-white">Loading Posts</p>
+          ) : (
+            <div className="mt-10 flex flex-wrap">
+              {posts?.map((post) => (
+                <ProfilePosts key={post.id} id={post.id} image={post.image} />
+              ))}
+            </div>
+          )}
         </div>
-        <div className="mt-10">
-          <h2>Posts</h2>
-        </div>
-      </div> 
-      }
+      )}
     </section>
-    
   );
 };
 

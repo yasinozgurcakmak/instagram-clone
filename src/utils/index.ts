@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import supabase from "../config/supabase";
 
 function generateUsername(name: string, surname: string) {
@@ -24,14 +25,15 @@ function previewImage(file: File): Promise<string | ArrayBuffer | null> {
     });
 }
 
-function toText(text: string | number | boolean | object) {
-    return String(text)
-}
 
 async function changeToImageAdress({table, image}: {table: string, image: {id: string, path: string, fullPath: string} | any}) {
     const { data } = await supabase.storage.from(table).getPublicUrl(image.path)
     return data.publicUrl
 }
 
+async function copyToClipboard(text: string) {
+    await navigator.clipboard.writeText(text);
+    toast.success("Url copied");
+}
 
-export { generateUsername, textTruncate, previewImage, toText, changeToImageAdress }
+export { generateUsername, textTruncate, previewImage, changeToImageAdress, copyToClipboard }

@@ -2,22 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-::-webkit-scrollbar {
-    width: 10px;
-    height: 5px;
-}
+::-webkit-scrollbar {width: 10px; height: 5px }
+::-webkit-scrollbar-track { background: #fff }
+::-webkit-scrollbar-thumb { background: gray }
+::-webkit-scrollbar-thumb:hover { background: #555;}
 
-::-webkit-scrollbar-track {
-    background: #fff;
-}
+.comments-scroolbar::-webkit-scrollbar{width: 5px;}
 
-::-webkit-scrollbar-thumb {
-    background: gray;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
 
 .swiper-button-prev { @apply after:content-['‹'] after:absolute w-5 h-5 after:text-xl after:pb-1 bg-gray-200 rounded-full text-current}
 .swiper-button-next { @apply after:content-['›'] after:absolute w-5 h-5 after:text-xl after:pb-1 bg-gray-200 rounded-full text-current}

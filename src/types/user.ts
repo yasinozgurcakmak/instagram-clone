@@ -1,10 +1,10 @@
 export interface User {
-        access_token: string;
-        token_type: string;
-        expires_in: number;
-        expires_at: number;
-        refresh_token: string;
-        user : User1;
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+    expires_at: number;
+    refresh_token: string;
+    user : User1;
 }
 export interface User1 {
     id: string;
@@ -36,6 +36,7 @@ export interface IdentityDataOrUserMetadata {
     username: string ;
     profile_image?: {id: string, path: string, fullPath: string} | any;
     bio?:string;
+    posts_ids?: (string)[] | null;
 }
 export interface IdentitiesEntity {
     identity_id: string;

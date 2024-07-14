@@ -10,7 +10,7 @@ import defaultImage from '../../assets/profile.jpg';
 import sidebar_menu from '../../assets/sidebar_menu.png';
 
 const SideBar = () => {
-    const user : {session: User | null}  = useSelector((state: RootState) => state.userSlice);
+    const currenUser : {session: User | null}  = useSelector((state: RootState) => state.userSlice);
     const [suggestedUsers, setSuggestedUsers] = useState<Array<{ userName: string, avatar: string }>>([]);
     useEffect(() => {
         const newStories = Array.from({ length: 5 }, () => ({
@@ -22,20 +22,20 @@ const SideBar = () => {
 
     const [profileImageUrl, setProfileImageUrl] = useState<string>("");
     const getImageURL = async () => {
-        const imageAdress = await changeToImageAdress({ table: "profile-image", image: user?.session?.user.user_metadata.profile_image })
+        const imageAdress = await changeToImageAdress({ table: "profile-image", image: currenUser?.session?.user.user_metadata.profile_image })
         setProfileImageUrl(imageAdress)
     }
     useEffect(() =>{
         getImageURL();
-    },[user]) 
+    },[currenUser]) 
     return (
         <div className="w-[20rem] text-white">
             <div className='flex justify-between my-20'>
                 <div className='flex gap-5'>
                     <img src={profileImageUrl ? profileImageUrl : defaultImage} alt="Profile Image" className='w-10 h-10 rounded-full object-cover' />
                     <div>
-                        {user && <h2 className="font-bold"><Link to={`/profile/${user?.session?.user.user_metadata.username}`}>{user?.session?.user.user_metadata.username}</Link></h2>}
-                        <p className="text-gray-500">{user && user?.session?.user.user_metadata.name}</p>
+                        {currenUser && <h2 className="font-bold"><Link to={`/profile/${currenUser?.session?.user.user_metadata.username}`}>{currenUser?.session?.user.user_metadata.username}</Link></h2>}
+                        <p className="text-gray-500">{currenUser && currenUser?.session?.user.user_metadata.name}</p>
                     </div>
                 </div>
                 <Button onClick={() => { }} variant='transparent' size='max' className='!text-brand text-xs'>Switch</Button>

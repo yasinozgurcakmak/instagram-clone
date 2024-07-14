@@ -9,6 +9,11 @@ import Button from "../base/Button";
 import supabase from "../../config/supabase";
 import { loginSchema } from "../../validation/auth";
 import { setUser } from "../../store/user";
+
+import first from "../../assets/login_slider/1.png"
+import second from "../../assets/login_slider/2.png"
+import third from "../../assets/login_slider/3.png"
+import fourth from "../../assets/login_slider/4.png"
 import app_store from "../../assets/app_store.png";
 import play_store from "../../assets/play_store.png";
 import logo_text from "../../assets/logo_text_dark.png";
@@ -64,10 +69,10 @@ const Login = () => {
             <div className="h-full w-full flex flex-wrap overflow-auto items-center gap-x-8 justify-center">
                 <div className="hidden md:block w-[380px] h-[581px] bg-logo-pattern relative bg-[length:468.32px_634.15px] bg-[top_left_-46px]">
                     <div className="w-[250px] h-[538px] absolute top-[27px] right-[18px]" ref={ref}>
-                        <img className="w-full h-full absolute top-0 left-0 opacity-0 transition-opacity duration-1000 ease-linear" src="https://www.instagram.com/static/images/homepage/screenshots/screenshot1-2x.png/cfd999368de3.png" alt="screenshot1"/>
-                        <img className="w-full h-full absolute top-0 left-0 opacity-0 transition-opacity duration-1000 ease-linear" src="https://www.instagram.com/static/images/homepage/screenshots/screenshot2-2x.png/80b8aebdea57.png" alt="screenshot2"/>
-                        <img className="w-full h-full absolute top-0 left-0 opacity-0 transition-opacity duration-1000 ease-linear" src="https://www.instagram.com/static/images/homepage/screenshots/screenshot3-2x.png/fe2540684ab2.png" alt="screenshot3"/>
-                        <img className="w-full h-full absolute top-0 left-0 opacity-0 transition-opacity duration-1000 ease-linear" src="https://www.instagram.com/static/images/homepage/screenshots/screenshot4-2x.png/8e9224a71939.png" alt="screenshot4"/>
+                        <img className="w-full h-full absolute top-0 left-0 opacity-0 transition-opacity duration-1000 ease-linear" src={first} alt="screenshot1"/>
+                        <img className="w-full h-full absolute top-0 left-0 opacity-0 transition-opacity duration-1000 ease-linear" src={second} alt="screenshot1"/>
+                        <img className="w-full h-full absolute top-0 left-0 opacity-0 transition-opacity duration-1000 ease-linear" src={third} alt="screenshot1"/>
+                        <img className="w-full h-full absolute top-0 left-0 opacity-0 transition-opacity duration-1000 ease-linear" src={fourth} alt="screenshot1"/>
                     </div>
                 </div>
 

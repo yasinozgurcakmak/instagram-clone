@@ -18,7 +18,7 @@ import profile from "../../assets/profile.jpg";
 const CreatePost = () => {
     const ref = useRef<HTMLInputElement>(null);
     const onFocus = () => { ref.current?.click() }
-    const user : {session: User | null}  = useSelector((state: RootState) => state.userSlice);
+    const currenUser : {session: User | null}  = useSelector((state: RootState) => state.userSlice);
     const [selectedFile, setSelectedFile] = useState<string | ArrayBuffer | null>(null);
     const [files, setFiles] = useState<File | null>(null);
 
@@ -33,29 +33,50 @@ const CreatePost = () => {
 
     const [profileImageUrl, setProfileImageUrl] = useState<string>("");
     const getImageURL = async () => {
-        const imageAdress = await changeToImageAdress({ table: "profile-image", image: user?.session?.user.user_metadata.profile_image })
+        const imageAdress = await changeToImageAdress({ table: "profile-image", image: currenUser?.session?.user.user_metadata.profile_image })
         setProfileImageUrl(imageAdress)
     }
 
-    const {mutate , isLoading} = useMutation(async (values: CreatePostType) => {
-        if (files ) {
-            const { data: image } = await supabase.storage.from("posts").upload(`${user?.session?.user.id}/${nanoid()}`, files)
     
-            if (image) {
-                const { error } = await supabase.from("posts").insert({
-                    user: {user_id : user?.session?.user.id, username : user?.session?.user.user_metadata.username, profile_image : user?.session?.user.user_metadata.profile_image},
-                    description: values.description,
-                    image: image
-                })
-                if (error) { toast.error("Failed to create post") }
-                else {
-                    toast.success("Post created successfully")
-                    setSelectedFile(null)
-                    setFiles(null)
-                }
+    const { mutate, isLoading } = useMutation(async (values: CreatePostType) => {
+        if (!files) return;
+    
+            const { data: image, error: uploadError } = await supabase.storage.from("posts").upload(`${currenUser?.session?.user.id}/${nanoid()}`, files);
+            
+            if (uploadError) {
+                toast.error("Failed to upload image, please try again later");
+                throw new Error("Failed to upload image");
             }
-        }
-    })
+    
+            const { data: postData, error: postError } = await supabase
+                .from("posts")
+                .insert({
+                    user: {
+                        user_id: currenUser?.session?.user.id,
+                        username: currenUser?.session?.user.user_metadata.username,
+                        profile_image: currenUser?.session?.user.user_metadata.profile_image
+                    },
+                    description: values.description,
+                    image: image,
+                    user_id: currenUser?.session?.user.id,
+
+                })
+                .select();
+    
+            if (postError || !postData) {
+                toast.error("Failed to create post, please try again later");
+            }
+    
+
+    
+            toast.success("Post created successfully");
+            setSelectedFile(null);
+            setFiles(null);
+   
+    });
+
+    
+    
 
    
     const { values, errors, handleChange, handleSubmit } = useFormik({
@@ -68,7 +89,7 @@ const CreatePost = () => {
     
     useEffect(() =>{
         getImageURL();
-    },[user?.session?.user.user_metadata.profile_image]) 
+    },[currenUser?.session?.user.user_metadata.profile_image]) 
     return (
         <section className="max-w-max min-w-[340px] md:min-w-[550px]">
             <header className="text-center py-5 text-white text-2xl">New Post</header>
@@ -84,7 +105,7 @@ const CreatePost = () => {
                 <div className="w-full">
                     <div className="flex items-center gap-3">
                         <img src={profileImageUrl ? profileImageUrl : profile} alt="Profile" className="w-8 h-8 rounded-full object-cover" loading="lazy" />
-                        <span className="font-semibold text-white">{user && user?.session?.user.user_metadata.username}</span>
+                        <span className="font-semibold text-white">{currenUser && currenUser?.session?.user.user_metadata.username}</span>
                     </div>
                     <Input type="textarea" name="description" value={values.description} onChange={handleChange} error={errors.description} placeholder="Write a caption" className="mt-5 h-20 w-full" />
                     <Button onClick={() => handleSubmit()} disable={isLoading} className="mt-10">Share</Button>
