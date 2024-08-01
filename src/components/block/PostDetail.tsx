@@ -33,21 +33,11 @@ const PostDetail = ({id}:PostDetailProps) => {
     const [imageURL, setImageURL] = useState<string | null>(null)
     const [profileImageURL, setProfileImageURL] = useState<string | null>(null)
     const postUrl = import.meta.env.VITE_URL + "/post/" + id;
-
-    const fetchLikes = async () => {
-        const { data, error } = await supabase.from("posts").select("like").eq("id", id).single()
-
-        if (error) toast.error("Failed to fetch likes")
-
-        if (data) {
-            const isLiked = data?.like.find((like: { user_id: string }) => like.user_id === currentUser.session?.user.id)
-            setIsLiked(isLiked ? true : false)
-        }
-    }
     const { data, refetch } = useQuery("post", async () => {
         const { data } = await supabase.from("posts").select("*").eq("id", id).single();
         return data
     })
+
     const getImageURL = async () => {
         const imageAdress = await changeToImageAdress({table: "posts", image: data.image })
         const profileImageAdress = await changeToImageAdress({table: "profile-image", image: data?.user.profile_image })
@@ -93,7 +83,6 @@ const PostDetail = ({id}:PostDetailProps) => {
         onSubmit: (values: { comments: string }) => mutate(values),
     })
 
-
     const [commentOwner, setCommentOwner] = useState<{ [commentId: string]: boolean }>({});
     const handleCommentHover = (commentId: string) => {
         setCommentOwner((prev) => ({ ...prev, [commentId]: true }));
@@ -114,7 +103,6 @@ const PostDetail = ({id}:PostDetailProps) => {
     })
     const { mutate: bookmarkFunction } = useMutation({
         mutationFn: async (id: number) => {
-
             if (bookmarkItem) {
                 const updatedBookmarks = isBookmarked ? bookmarkItem.posts.filter((postId: number) => postId !== id) : [...bookmarkItem.posts, id];
                 const { error } = await supabase.from("bookmarks").update({ posts: updatedBookmarks }).eq("user", currentUser.session?.user.id);
@@ -144,12 +132,21 @@ const PostDetail = ({id}:PostDetailProps) => {
         }
     })
 
-
+    const fetchLikes = async () => {
+        const { data, error } = await supabase.from("posts").select("like").eq("id", id).single();
+        if (error) toast.error("Failed to fetch likes");
+        const isLiked = data?.like?.some((like: { user_id: string }) => like.user_id === currentUser.session?.user.id);
+        setIsLiked(isLiked);       
+    };
+    
     useEffect(() =>{
-        getImageURL();
+        if(data?.image){
+            getImageURL();
+        }
         refetch();
         fetchLikes();
     },[id, data])
+
     return (
         <div className="bg-black text-white flex w-[1000px] h-[550px]">
             <div className="w-2/5 h-[550px]">
@@ -187,7 +184,7 @@ const PostDetail = ({id}:PostDetailProps) => {
                 </div>
                 <div className=" flex flex-col justify-between ">
                     <div className="h-72 overflow-y-scroll scroll-m-1">
-                        {data?.comments && data?.comments.map((comment:any) => (
+                        {data?.comments && data?.comments.map((comment:{id:string, username:string, user_id:string, comment:string}) => (
                             <div
                                 key={comment.id}
                                 className="flex items-center justify-between h-6 cursor-pointer my-1 ml-[52px] relative text-sm"

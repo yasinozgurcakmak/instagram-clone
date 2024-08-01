@@ -11,9 +11,9 @@ import { LuSend } from "react-icons/lu";
 import { FaRegBookmark, FaBookmark } from "react-icons/fa6";
 import { SlOptions } from "react-icons/sl";
 import { MdDelete } from "react-icons/md";
-import Button from "../base/Button";
-import Input from "../base/Input";
-import Modal from "../base/Modal";
+import Button from "../../components/base/Button";
+import Input from "../../components/base/Input";
+import Modal from "../../components/base/Modal";
 import { PostType } from "../../types";
 import { User } from "../../types/user";
 import { changeToImageAdress, copyToClipboard } from "../../utils";
@@ -45,13 +45,11 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
     const decrementComment = () => { setCommentCount(3) }
 
     const fetchLikes = async () => {
-        const { data, error } = await supabase.from("posts").select("like").eq("id", id).single()
-        if (error) toast.error("Failed to fetch likes")
-        if (data) {
-            const isLiked = data.like.find((like: { user_id: string }) => like.user_id === currentUser.session?.user.id)
-            setIsLiked(isLiked ? true : false)
-        }
-    }
+        const { data, error } = await supabase.from("posts").select("like").eq("id", id).single();
+        if (error) toast.error("Failed to fetch likes");
+        const isLiked = data?.like?.some((like: { user_id: string }) => like?.user_id === currentUser.session?.user.id);
+        setIsLiked(isLiked);       
+    };
 
     const [imageURL, setImageURL] = useState<string | null>(null)
     const [profileImageURL, setProfileImageURL] = useState<string | null>(null)
@@ -61,14 +59,14 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
         setImageURL(imageAdress)
         setProfileImageURL(profileImageAdress)
     }
-    useEffect(() => { fetchLikes(); getImageURL() }, [id, currentUser.session?.user.id])
+    useEffect(() => { fetchLikes(); getImageURL() }, [id, user, currentUser.session?.user.id])
 
     const { mutate: likeAction } = useMutation({
         mutationFn: async () => {
             const like_objects = { username: currentUser.session?.user.user_metadata.name, user_id: currentUser.session?.user.id }
             const updatedLike = like ? [...like, like_objects] : [like_objects];
             if (isLiked) {
-                const filteredLikes = like?.filter(item => item.user_id !== currentUser.session?.user.id);
+                const filteredLikes = like?.filter(item => item?.user_id !== currentUser.session?.user.id);
                 const { error } = await supabase.from("posts").update({ like: filteredLikes }).eq("id", id);
                 if (error) toast.error("Failed to unlike, try again later");
                 refetch()
@@ -83,7 +81,7 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
 
     const { mutate } = useMutation({
         mutationFn: async (values: { comments: string }) => {
-            const comment_objects = { id: uid(), username: currentUser.session?.user.user_metadata.username, user_id: currentUser.session?.user.id, comment: values.comments }
+            const comment_objects = { id: uid(), username: currentUser.session?.user.user_metadata?.username, user_id: currentUser.session?.user.id, comment: values.comments }
             const updatedComments = comments ? [...comments, comment_objects] : [comment_objects];
             const { error } = await supabase.from("posts").update({ comments: updatedComments }).eq("id", id)
             if (error) toast.error("Failed to comment, try again later")
@@ -128,7 +126,6 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
     })
     const { mutate: bookmarkFunction } = useMutation({
         mutationFn: async (id: number) => {
-
             if (bookmarkItem) {
                 const updatedBookmarks = isBookmarked ? bookmarkItem.posts.filter((postId: number) => postId !== id) : [...bookmarkItem.posts, id];
                 const { error } = await supabase.from("bookmarks").update({ posts: updatedBookmarks }).eq("user", currentUser.session?.user.id);
@@ -154,17 +151,17 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
             <header className="flex justify-between py-5">
                 <div className="flex">
                     <img src={profileImageURL || DefaultProfile} alt="Profile" className="w-7 h-7 mr-3 rounded-full object-cover" />
-                    {user && <Link to={`/profile/${user.username}`} className="mr-2">{user.username}</Link>} • <span className="ml-2">{moment(created_at).startOf('minute').fromNow()}</span>
+                    {user && <Link to={`/profile/${user?.username}`} className="mr-2">{user?.username}</Link>} • <span className="ml-2">{moment(created_at).startOf('minute').fromNow()}</span>
                 </div>
                 <div className="relative">
                     <Button onClick={() => setShowModal(!showModal)} variant="transparent" size="max"><SlOptions /></Button>
                     <Modal isOpen={showModal} onClose={closeModal}>
                         <ul className="w-96 text-white text-center">
-                            <li className="py-4 border-b-slate-500 border-b-[1px] cursor-pointer"><Link to={"/"} onClick={() => bookmarkFunction(id)}>Add to favorites</Link></li>
+                            <li className="py-4 border-b-slate-500 border-b-[1px] cursor-pointer"><Link to={"/"} onClick={() => bookmarkFunction(id)} className="w-full h-full"> {isBookmarked ? "Remove to favorites" : "Add to favorites"} </Link></li>
                             <li className="py-4 border-b-slate-500 border-b-[1px] cursor-pointer"><Link to={postUrl}>Go to posts</Link></li>
                             <li className="py-4 border-b-slate-500 border-b-[1px] cursor-pointer" onClick={() =>copyToClipboard(postUrl)}>Copy link</li>
-                            <li className="py-4 border-b-slate-500 border-b-[1px] cursor-pointer"><Link to={`/profile/${user.username}`}>About this account</Link></li>
-                            {currentUser.session?.user.id === user.user_id && <li className="py-4 border-b-slate-500 border-b-[1px] cursor-pointer"><Link to={"/"} onClick={() => deletePost(id)}>Delete</Link></li>}
+                            <li className="py-4 border-b-slate-500 border-b-[1px] cursor-pointer"><Link to={`/profile/${user?.username}`}>About this account</Link></li>
+                            {currentUser.session?.user.id === user?.user_id && <li className="py-4 border-b-slate-500 border-b-[1px] cursor-pointer"><Link to={"/"} onClick={() => deletePost(id)}>Delete</Link></li>}
                             <li className="py-2 cursor-pointer" onClick={closeModal}>Cancel</li>
                         </ul>
                     </Modal>
@@ -185,7 +182,7 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
                     </div>
                 </div>
                 <p>{like ? like.length : 0} likes</p>
-                <p className=" my-3 text-sm"><Link to={"/"} className="mr-1">{user.username}</Link> {description} </p>
+                <p className=" my-3 text-sm"><Link to={"/"} className="mr-1">{user?.username}</Link> {description} </p>
 
                 {comments && comments.length > 3 && commentCount <= 3 && (
                     <Button onClick={incrementComment} variant="transparent" size="max">View all {comments.length} comments</Button>
@@ -201,12 +198,12 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
                         >
                             <div>
                                 <Link to={"/"} className="mr-2">
-                                    {comment.username}
+                                    {comment?.username}
                                 </Link>
                                 {comment.comment}
                             </div>
 
-                            {comment.user_id === currentUser?.session?.user.id && (
+                            {comment?.user_id === currentUser?.session?.user.id && (
                                 <Button onClick={() => { deleteComment(comment.id) }} className={`${!commentOwner[comment.id] ? "hidden" : ""}`} variant="transparent" size="max" refs={buttonRef}>
                                     <MdDelete />
                                 </Button>

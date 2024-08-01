@@ -26,8 +26,8 @@ function previewImage(file: File): Promise<string | ArrayBuffer | null> {
 }
 
 
-async function changeToImageAdress({table, image}: {table: string, image: {id: string, path: string, fullPath: string} | any}) {
-    const { data } = await supabase.storage.from(table).getPublicUrl(image.path)
+async function changeToImageAdress({table, image}: {table: string, image: {id: string, path: string, fullPath: string}}) {
+    const { data } =  supabase.storage.from(table).getPublicUrl(image.path)
     return data.publicUrl
 }
 
@@ -35,5 +35,6 @@ async function copyToClipboard(text: string) {
     await navigator.clipboard.writeText(text);
     toast.success("Url copied");
 }
+
 
 export { generateUsername, textTruncate, previewImage, changeToImageAdress, copyToClipboard }
