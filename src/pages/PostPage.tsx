@@ -7,7 +7,7 @@ const PostPage = () => {
     return (
         <div className="bg-black flex">
             <Menu/>
-            <div className="w-full h-screen flex items-center justify-center">
+            <div className="w-full h-screen flex mt-10 md:mt-0 md:items-center justify-center">
                 <PostDetail id={Number(id)} />
             </div>
         </div>

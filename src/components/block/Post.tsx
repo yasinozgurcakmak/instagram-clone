@@ -148,7 +148,7 @@ const Post = ({ post: { id, created_at, user, description, like, comments, image
     })
     return (
         <div>
-            <header className="flex justify-between py-5">
+            <header className="flex justify-between md:py-5 w-full">
                 <div className="flex">
                     <img src={profileImageURL || DefaultProfile} alt="Profile" className="w-7 h-7 mr-3 rounded-full object-cover" />
                     {user && <Link to={`/profile/${user?.username}`} className="mr-2">{user?.username}</Link>} • <span className="ml-2">{moment(created_at).startOf('minute').fromNow()}</span>

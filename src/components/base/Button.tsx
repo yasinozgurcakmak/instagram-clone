@@ -5,18 +5,18 @@ interface ButtonType {
     children: React.ReactNode;
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
     variant?: 'primary' | 'secondary' | "transparent";
-    size?: "max" | 'lg';
+    size?: "max" | 'full';
     disable?: boolean;
     submitting?: boolean;
     type?: 'button' | 'submit' | 'reset';
     className?: string;
     refs?: React.RefObject<HTMLButtonElement>;
 }
-const Button = ({ children, className, onClick, disable, submitting, variant = "primary", size = "lg", type = "submit", refs }: ButtonType) => {
+const Button = ({ children, className, onClick, disable, submitting, variant = "primary", size = "full", type = "submit", refs }: ButtonType) => {
     const style = classNames(" flex items-center justify-center cursor-pointer gap-3 disabled:opacity-50 disabled:cursor-not-allowed h-[30px] mt-1 rounded font-medium text-white text-sm",
         {
-            "w-full": size === "lg",
-            "w-max px-5 py-2": size === "max",
+            "w-full": size === "full",
+            "w-max px-3 md:px-5 py-2": size === "max",
         },
         {
             "bg-brand hover:to-brandDark": variant === "primary",

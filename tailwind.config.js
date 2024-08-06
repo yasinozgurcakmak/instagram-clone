@@ -20,6 +20,15 @@ export default {
         "38": "9.375rem"
       }
     },
+
+  },
+  fontSize: {
+    sm: '0.6rem',
+    base: '0.8rem',
+    xl: '1rem',
+    '2xl': '1.25rem',
+    '3xl': '1.5rem',
+    '4xl': '1.75rem',
   },
   plugins: [],
 }

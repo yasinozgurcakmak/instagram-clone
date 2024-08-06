@@ -3,14 +3,14 @@ import SideBar from "./SideBar";
 import Stories from "./Stories";
 const Content = () => {
     return (
-        <section className="flex gap-10 justify-evenly w-full">
-            <div className="w-[650px] ">
+        <section className="flex justify-center w-full">
+            <div className="w-full md:max-w-[650px] ">
                 <Stories />
-                <div className="w-[500px] mx-auto">
+                <div className="md:w-[550px] w-11/12 mx-auto">
                     <PostWrapper />
                 </div>
             </div>
-            <div className="hidden lg:block">
+            <div className="hidden xl:block xl:ml-20">
                 <SideBar />
             </div>
         </section>

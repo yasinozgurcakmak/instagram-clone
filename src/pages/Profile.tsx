@@ -122,8 +122,6 @@ const Profile = () => {
     }
   })
   
-  
-
   useEffect(() => {
     if (data?.profile_image) {
       getImageURL();
@@ -148,20 +146,20 @@ const Profile = () => {
       { isLoading ? (
         <p>Loading</p>
       ) : (
-        <div className="w-3/6 mx-auto py-10 px-16">
+        <div className="xl:w-3/6 mx-auto py-10 px-7 md:px-16">
           <div className="flex">
-            <label htmlFor="profileImageInput" className={`relative cursor-pointer ${checkOwnProfile && "group hover:opacity-35"}`}>
-              <img src={profileImageUrl ? profileImageUrl : profileImage} alt={data?.name} className="rounded-full w-36 h-36 object-cover" />
+            <label htmlFor="profileImageInput" className={`relative cursor-pointer min-w-20 min-h-20 max-w-20 max-h-20 ${checkOwnProfile && "group hover:opacity-35"}`}>
+              <img src={profileImageUrl ? profileImageUrl : profileImage} alt={data?.name} className="rounded-full w-full h-full object-cover" />
               {checkOwnProfile && (
                 <input type="file" className="hidden" id="profileImageInput" name="profileImageInput" onChange={handleSaveProfileImage} />
               )}
               <FaPlusCircle className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-1/6 h-1/6 rounded-full text-slate-600 hidden group-hover:block group-hover:opacity-100 transition-all" />
             </label>
-            <div className="lg:ml-24">
-              <div className="lg:flex lg:items-center h-10">
+            <div className="lg:ml-24 ml-5 px-2 relative">
+              <div className="flex items-center flex-wrap h-10">
                 <h1>{data?.username}</h1>
                 {checkOwnProfile && (
-                  <Button onClick={() => setEditShowModal(!editShowModal)} variant="secondary" size="max" className="ml-5">
+                  <Button onClick={() => setEditShowModal(!editShowModal)} variant="secondary" size="max" className="ml-2 md:ml-5 md:static absolute top-10 ">
                     Edit Profile
                   </Button>
                 )}
@@ -170,9 +168,11 @@ const Profile = () => {
                     {isFollowing ? "Unfollow" : "Follow"}
                   </Button>
                 )}
+
                 <Button onClick={() => setSettingsShowModal(!editSettingsModal)} variant="transparent" size="max">
-                  <IoMdSettings className="text-xl" />
+                  <IoMdSettings  />
                 </Button>
+
                 <Modal isOpen={editShowModal} onClose={closeEditModal}>
                   <EditProfile refetch={refetch} />
                 </Modal>
@@ -180,14 +180,14 @@ const Profile = () => {
                   <ProfileSettings username={username} closeModal={closeSettingsModal} />
                 </Modal>
               </div>
-              <div className="flex justify-between w-full my-5">
+              <div className="flex w-full mb-5 md:mt-5 mt-12 text-xs md:text-base">
                 <p>{posts?.length} Post</p>
                 <p className="mx-5">{data?.following == null ? 0  : data?.following.length} following</p>
                 <p>{data?.followers == null ? 0 :  data?.followers.length} followers</p>
               </div>
-              <p className="mt-5">{data?.bio ? data.bio : "Bio not yet"}</p>
             </div>
           </div>
+          <p >{data?.bio ? data.bio : "Bio not yet"}</p>
           <div className="flex justify-center my-5">
             <Button onClick={() => setActiveTab("posts")} size="max" variant="transparent"> <AiOutlineTable/> POSTS</Button>
             {data?.user_id === currentUser.session?.user.id && (<Button onClick={() => setActiveTab("bookmarked")} size="max" variant="transparent"> <AiOutlineTable/> BOOKMARK</Button>)}
@@ -198,7 +198,7 @@ const Profile = () => {
             ) : posts?.length === 0 ? (<p>No Posts Yet</p>) : (
               <div className="mt-10 flex flex-wrap">
                 {Array.isArray(posts) && posts?.map((post) => (
-                <ProfilePosts key={post.id} id={post.id} image={post.image} />
+                  <ProfilePosts key={post.id} id={post.id} image={post.image} />
                 ))}
               </div>
             )

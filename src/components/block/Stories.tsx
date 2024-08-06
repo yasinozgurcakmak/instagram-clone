@@ -8,6 +8,7 @@ import "swiper/css/navigation";
 
 const Stories = () => {
     const [story, setStory] = useState<Array<{ name: string, avatar: string }>>([]);
+
     useEffect(() => {
         const newStories = Array.from({ length: 20 }, () => ({
             name: faker.person.firstName(),
@@ -15,9 +16,10 @@ const Stories = () => {
         }));
         setStory(newStories);
     }, [])
-
+    
     return (
-        <ul className="flex items-center justify-center mx-auto w-[550px] lg:w-full h-28 pl-5 mt-16 ">
+        // <ul className="flex items-center justify-center mx-auto lg:max-w-[550px] w-full h-28 pl-5 mt-16 ">
+        <ul className="flex items-center justify-center mx-auto w-96 md:w-full h-28 md:pl-5 mt-16 ">
             <Swiper
                 spaceBetween={50}
                 slidesPerView={10}

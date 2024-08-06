@@ -51,7 +51,7 @@ const PostWrapper = () => {
     });
 
     return (
-        <div className="text-white relative">
+        <div className="text-white relative w-auto mx-auto">
             {isLoading && <VscLoading className="animate-spin" />}
             {data && data.map((post: PostType) => <Post key={post.id} refetch={refetch} post={post} />)}
         </div>

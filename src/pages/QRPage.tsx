@@ -12,7 +12,7 @@ const QRPage = () => {
     const canvas = document.getElementById("QR") as HTMLCanvasElement;
     if (canvas) {
       const pngUrl = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-      let downloadLink = document.createElement("a");
+      const downloadLink = document.createElement("a");
       downloadLink.href = pngUrl;
       downloadLink.download = `${username}.png`;
       document.body.appendChild(downloadLink);
@@ -22,9 +22,9 @@ const QRPage = () => {
   };
 
   return (
-    <section className="bg-black flex">
+    <section className="bg-black flex h-screen w-full">
        <Menu />
-      <div className="flex w-3/6 m-auto">
+      <div className="flex flex-col md:flex-row items-center w-90 md:w-3/6 m-auto">
         <div>
           <QRCode value={url} size={250} qrStyle="dots" eyeRadius={5} id="QR" />
         </div>

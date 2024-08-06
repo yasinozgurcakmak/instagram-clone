@@ -16,7 +16,6 @@ import QRPage from "./pages/QRPage";
 import favicon from "./assets/logo.svg";
 import PostPage from "./pages/PostPage";
 import Error from "./components/base/Error";
-import Animation from "./components/base/Animation";
 
 function App() {
   const dispatch = useDispatch();
@@ -35,13 +34,12 @@ function App() {
       <ToastContainer />
       <QueryClientProvider client={queryClient}>
         <Routes>
-          <Route path="/" element={<Home />}></Route>
+          <Route path="/" element={<Home />}/>
           <Route path="accounts/emailsignup" element={<Register />} />
           <Route path="profile/:username" element={<Profile />} />          
           <Route path="post/:id" element={<PostPage />} />          
           <Route path="qr/:username" element={<QRPage />} />
           <Route path="404" element={<Error />} />          
-          <Route path="animation" element={<Animation />} />          
           <Route path="*" element={<Error />} />          
         </Routes>
       </QueryClientProvider>

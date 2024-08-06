@@ -9,8 +9,9 @@
 
 .comments-scroolbar::-webkit-scrollbar{width: 5px;}
 
-
 .swiper-button-prev { @apply after:content-['‹'] after:absolute w-5 h-5 after:text-xl after:pb-1 bg-gray-200 rounded-full text-current}
 .swiper-button-next { @apply after:content-['›'] after:absolute w-5 h-5 after:text-xl after:pb-1 bg-gray-200 rounded-full text-current}
 .swiper-pagination { @apply relative }
 .swiper-pagination-bullet { @apply w-2 h-2 bg-gray-200 rounded-full mx-1 }
+
+.w-90{width: calc(100vw - 100px);}

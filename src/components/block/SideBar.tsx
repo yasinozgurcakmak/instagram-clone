@@ -28,10 +28,10 @@ const SideBar = () => {
         getImageURL();
     },[currentUser]) 
     return (
-        <div className="w-[20rem] text-white">
-            <div className='flex justify-between my-20'>
-                <div className='flex gap-5'>
-                    <img src={profileImageUrl ? profileImageUrl : defaultImage} alt="Profile Image" className='w-10 h-10 rounded-full object-cover' />
+        <div className="max-w-[20rem] w-full text-white">
+            <div className='flex justify-between my-20 min-w-full'>
+                <div className='flex gap-5 '>
+                    <img src={profileImageUrl ? profileImageUrl : defaultImage} alt="Profile Image" className='max-w-8 max-h-8 min-h-8 min-w-8 rounded-full object-cover' />
                     <div>
                         {currentUser && <h2 className="font-bold"><Link to={`/profile/${currentUser?.session?.user.user_metadata.username}`}>{currentUser?.session?.user.user_metadata.username}</Link></h2>}
                         <p className="text-gray-500">{currentUser && currentUser?.session?.user.user_metadata.name}</p>

@@ -8,7 +8,7 @@ const Home = () => {
     const currenUser = useSelector((state: RootState) => state.userSlice)
     if(currenUser.session === null) return <Login/>
     return (
-        <section className="bg-black flex">
+        <section className="bg-black md:flex  overflow-hidden">
             <Menu/>
             <Content/>
         </section>

@@ -67,17 +67,11 @@ const CreatePost = () => {
                 toast.error("Failed to create post, please try again later");
             }
     
-
-    
             toast.success("Post created successfully");
             setSelectedFile(null);
             setFiles(null);
    
     });
-
-    
-    
-
    
     const { values, errors, handleChange, handleSubmit } = useFormik({
         initialValues:{
@@ -100,8 +94,8 @@ const CreatePost = () => {
                 <input type="file" className="hidden" id="post" name="post" ref={ref} accept=".jpg,.jpeg,.png,.webp" onChange={onSelectFile} />
                 <Button onClick={onFocus}>Select From Computer</Button>
             </div>
-            <div className={selectedFile ? "flex items-center justify-center gap-5 w-[500px] h-[350px] mx-auto " : "hidden"}>
-                {selectedFile && <img src={selectedFile.toString()} className="w-60 h-60 object-cover" />}
+            <div className={selectedFile ? "flex items-center justify-center flex-col md:flex-row gap-5 w-full md:w-[500px] md:h-[350px] py-5 mx-auto " : "hidden"}>
+                {selectedFile && <img src={selectedFile.toString()} className="w-60 h-60 object-cover " />}
                 <div className="w-full">
                     <div className="flex items-center gap-3">
                         <img src={profileImageUrl ? profileImageUrl : profile} alt="Profile" className="w-8 h-8 rounded-full object-cover" loading="lazy" />

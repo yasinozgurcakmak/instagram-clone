@@ -148,11 +148,11 @@ const PostDetail = ({id}:PostDetailProps) => {
     },[id, data])
 
     return (
-        <div className="bg-black text-white flex w-[1000px] h-[550px]">
-            <div className="w-2/5 h-[550px]">
-               {imageURL && <img src={imageURL || ""} alt={data?.description || "Post Image"} className="h-full w-96" />} 
+        <div className="bg-black text-white flex flex-col md:flex-row w-90 lg:w-[1000px] max-h-[550px]">
+            <div className="w-full md:w-2/5 h-96 md:h-[550px]">
+               {imageURL && <img src={imageURL || ""} alt={data?.description || "Post Image"} className="h-full w-96 object-cover" />} 
             </div>
-            <div className="w-3/5 h-[550] relative">
+            <div className="md:w-3/5  h-[550px] relative">
                 <div className="flex justify-between px-5 py-3">
                     <div className="flex items-center">
                         <img src={profileImageURL || ""} alt={data?.user.username || "Profile Image"} className="w-5 h-5 object-cover rounded-full" />
@@ -170,7 +170,7 @@ const PostDetail = ({id}:PostDetailProps) => {
                     </Modal>
                 </div>
                 <hr  />
-                <div className="">
+                <div>
                     {data?.description && 
                         <div className="flex justify-between px-5 py-3 ">
                             <div className="flex ">
