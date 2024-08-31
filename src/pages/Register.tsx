@@ -47,8 +47,7 @@ const Register = () => {
       }
     }
   };
-  const { handleSubmit, values, handleChange, isSubmitting, isValid, errors } =
-    useFormik({
+  const { handleSubmit, values, handleChange, isSubmitting, isValid, errors } = useFormik({
       initialValues: {
         email: "",
         name: "",

@@ -22,7 +22,6 @@ import footer from "../../assets/login-footer.png";
 const Login = () => {
     const ref = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch()
-
 	useEffect(() => {
         const images = ref?.current?.querySelectorAll('img'), total = images?.length ?? 0 
         let current:number = 0;
@@ -95,7 +94,7 @@ const Login = () => {
                                 <AiFillFacebook size={20}/>
                                 Log in with Facebook
                             </Link>
-                            <Link to="#" className="text-xs flex items-center justify-center text-link">
+                            <Link to="/accounts/password/reset/" className="text-xs flex items-center justify-center text-link">
                                 Forgot password?
                             </Link>
                         </div>

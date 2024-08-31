@@ -146,7 +146,7 @@ const Profile = () => {
       { isLoading ? (
         <p>Loading</p>
       ) : (
-        <div className="xl:w-3/6 mx-auto py-10 px-7 md:px-16">
+        <div className="xl:w-3/6 w-full mx-auto py-10 px-7 md:px-16 h-screen">
           <div className="flex">
             <label htmlFor="profileImageInput" className={`relative cursor-pointer min-w-20 min-h-20 max-w-20 max-h-20 ${checkOwnProfile && "group hover:opacity-35"}`}>
               <img src={profileImageUrl ? profileImageUrl : profileImage} alt={data?.name} className="rounded-full w-full h-full object-cover" />
@@ -196,7 +196,7 @@ const Profile = () => {
             isLoadingPosts ? (
               <p className="text-white">Loading Posts</p>
             ) : posts?.length === 0 ? (<p>No Posts Yet</p>) : (
-              <div className="mt-10 flex flex-wrap">
+              <div className="mt-10 flex flex-wrap ">
                 {Array.isArray(posts) && posts?.map((post) => (
                   <ProfilePosts key={post.id} id={post.id} image={post.image} />
                 ))}

@@ -18,11 +18,22 @@ const Stories = () => {
     }, [])
     
     return (
-        // <ul className="flex items-center justify-center mx-auto lg:max-w-[550px] w-full h-28 pl-5 mt-16 ">
         <ul className="flex items-center justify-center mx-auto w-96 md:w-full h-28 md:pl-5 mt-16 ">
             <Swiper
-                spaceBetween={50}
-                slidesPerView={10}
+                spaceBetween={40}
+                slidesPerView={7}
+                breakpoints={
+                    {
+                        0: {
+                            slidesPerView: 4,
+                            spaceBetween: 10,
+                        },
+                        1024: {
+                            slidesPerView: 6,
+                            spaceBetween: 25,
+                        },
+                    }
+                }
                 modules={[Navigation, Pagination]}
                 navigation
                 pagination={{ clickable: true }}

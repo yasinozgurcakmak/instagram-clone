@@ -16,6 +16,8 @@ import QRPage from "./pages/QRPage";
 import favicon from "./assets/logo.svg";
 import PostPage from "./pages/PostPage";
 import Error from "./components/base/Error";
+import ResetPassword from "./pages/ResetPassword";
+import ResetPasswordScreen from "./pages/ResetPasswordScreen";
 
 function App() {
   const dispatch = useDispatch();
@@ -36,6 +38,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}/>
           <Route path="accounts/emailsignup" element={<Register />} />
+          <Route path="accounts/password/reset" element={<ResetPassword />} />
+          <Route path="accounts/password/reset/passwordreset" element={<ResetPasswordScreen />} />
           <Route path="profile/:username" element={<Profile />} />          
           <Route path="post/:id" element={<PostPage />} />          
           <Route path="qr/:username" element={<QRPage />} />

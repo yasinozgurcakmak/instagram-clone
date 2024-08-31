@@ -18,7 +18,7 @@ import profile from "../../assets/profile.jpg";
 const CreatePost = () => {
     const ref = useRef<HTMLInputElement>(null);
     const onFocus = () => { ref.current?.click() }
-    const currenUser : {session: User | null}  = useSelector((state: RootState) => state.userSlice);
+    const currentUser : {session: User | null}  = useSelector((state: RootState) => state.userSlice);
     const [selectedFile, setSelectedFile] = useState<string | ArrayBuffer | null>(null);
     const [files, setFiles] = useState<File | null>(null);
 
@@ -33,7 +33,7 @@ const CreatePost = () => {
 
     const [profileImageUrl, setProfileImageUrl] = useState<string>("");
     const getImageURL = async () => {
-        const imageAdress = await changeToImageAdress({ table: "profile-image", image: currenUser?.session?.user.user_metadata.profile_image })
+        const imageAdress = await changeToImageAdress({ table: "profile-image", image: currentUser?.session?.user.user_metadata.profile_image })
         setProfileImageUrl(imageAdress)
     }
 
@@ -41,7 +41,7 @@ const CreatePost = () => {
     const { mutate, isLoading } = useMutation(async (values: CreatePostType) => {
         if (!files) return;
     
-            const { data: image, error: uploadError } = await supabase.storage.from("posts").upload(`${currenUser?.session?.user.id}/${nanoid()}`, files);
+            const { data: image, error: uploadError } = await supabase.storage.from("posts").upload(`${currentUser?.session?.user.id}/${nanoid()}`, files);
             
             if (uploadError) {
                 toast.error("Failed to upload image, please try again later");
@@ -52,13 +52,13 @@ const CreatePost = () => {
                 .from("posts")
                 .insert({
                     user: {
-                        user_id: currenUser?.session?.user.id,
-                        username: currenUser?.session?.user.user_metadata.username,
-                        profile_image: currenUser?.session?.user.user_metadata.profile_image
+                        user_id: currentUser?.session?.user.id,
+                        username: currentUser?.session?.user.user_metadata.username,
+                        profile_image: currentUser?.session?.user.user_metadata.profile_image
                     },
                     description: values.description,
                     image: image,
-                    user_id: currenUser?.session?.user.id,
+                    user_id: currentUser?.session?.user.id,
 
                 })
                 .select();
@@ -83,7 +83,7 @@ const CreatePost = () => {
     
     useEffect(() =>{
         getImageURL();
-    },[currenUser?.session?.user.user_metadata.profile_image]) 
+    },[currentUser?.session?.user.user_metadata.profile_image]) 
     return (
         <section className="max-w-max min-w-[340px] md:min-w-[550px]">
             <header className="text-center py-5 text-white text-2xl">New Post</header>
@@ -99,7 +99,7 @@ const CreatePost = () => {
                 <div className="w-full">
                     <div className="flex items-center gap-3">
                         <img src={profileImageUrl ? profileImageUrl : profile} alt="Profile" className="w-8 h-8 rounded-full object-cover" loading="lazy" />
-                        <span className="font-semibold text-white">{currenUser && currenUser?.session?.user.user_metadata.username}</span>
+                        <span className="font-semibold text-white">{currentUser && currentUser?.session?.user.user_metadata.username}</span>
                     </div>
                     <Input type="textarea" name="description" value={values.description} onChange={handleChange} error={errors.description} placeholder="Write a caption" className="mt-5 h-20 w-full" />
                     <Button onClick={() => handleSubmit()} disable={isLoading} className="mt-10">Share</Button>

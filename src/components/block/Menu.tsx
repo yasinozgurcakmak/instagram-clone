@@ -41,7 +41,7 @@ const Menu = () => {
         getImageURL();
     },[currentUser]) 
     return (
-        <section className="md:h-screen w-full md:max-w-38 lg:max-w-[335px] px-4 text-white flex md:flex-col bg-black fixed md:relative bottom-0 z-50  md:border-r border-r-slate-800 pl-5">
+        <nav className="md:h-screen w-full md:max-w-38 lg:max-w-[335px] px-4 text-white flex md:flex-col fixed bottom-0 z-50 md:border-r border-r-slate-800 pl-5">
             <div className="w-full pt-[32px] px-2 mb-[19px] hidden md:block">
                 <Link to="/"><img src={logo} alt="Logo" className="w-[103px] mx-auto h-10 object-contain lg:hidden" /></Link>
                 <Link to="/"><img src={logo_text} alt="Logo" className="w-[103px] h-10 object-contain hidden lg:block" /></Link>
@@ -81,7 +81,7 @@ const Menu = () => {
             <Modal isOpen={showModal} onClose={closeModal}>
                 <CreatePost/>
             </Modal>
-        </section>
+        </nav>
     );
 };
 

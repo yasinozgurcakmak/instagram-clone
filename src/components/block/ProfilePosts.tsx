@@ -39,7 +39,7 @@ const ProfilePosts = ({ id, image }: ProfilePostsProps) => {
 
   return (
     <div>
-      <div onClick={() =>{goToDetail()}} className="w-60 h-60 m-3 hover:brightness-75 group relative cursor-pointer">
+      <div onClick={() =>{goToDetail()}} className="w-28 h-28 md:w-60 md:h-60 m-3 hover:brightness-75 group relative cursor-pointer">
         <img src={`${imageURL}`} alt={`${id}`} loading="lazy" className="object-cover h-full w-full"/>
         <span className="absolute bg-opacity-70 hidden group-hover:block w-full h-max brightness-100 top-1/2 left-1/2 -translate-x-1/2 backdrop-blur-2xl text-center font-semibold py-1">Go To Detail</span>
       </div>
