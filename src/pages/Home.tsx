@@ -1,13 +1,14 @@
 import { useSelector } from "react-redux";
 import Login from "../components/block/Login";
-import { RootState } from "../store";
 import Menu from "../components/block/Menu";
 import Content from "../components/block/Content";
+import { RootState } from "../store";
+
 const Home = () => {
-    const user = useSelector((state: RootState) => state.userSlice)
-    if(user.session === null) return <Login/>
+    const currentUser = useSelector((state: RootState) => state.userSlice)
+    if(currentUser.session === null) return <Login/>
     return (
-        <section className="bg-black flex gap-20">
+        <section className="bg-black md:flex  overflow-hidden">
             <Menu/>
             <Content/>
         </section>

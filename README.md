@@ -1,30 +1,20 @@
-# React + TypeScript + Vite
+# Instagram Clone Projects with React + Supabase + Tailwind
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Description
 
-Currently, two official plugins are available:
+This project is a clone of a social media application similar to Instagram. It is developed using React and Supabase. In this application, users can experience the basic features of social media interactions. The project includes various features such as user registration, login, password reset, profile update, and following other users.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- User Registration and Login: New users can sign up, and existing users can log in. With the password reset feature, users can easily renew their passwords.
+- Profile Management: Users can update their profiles, change their profile pictures, and edit their personal information.
+- Following: Users can follow others and access the content of the people they follow.
+- Profil Görüntüleme: Bir kullanıcının profilini ziyaret ettiğinizde, o kişinin kaç takipçisi olduğunu ve kimleri takip ettiğini görebilirsiniz.
+- Posting: Users can make posts. Only their followers and themselves can see the posts.
+- Like, Comment, Save : Users can like, comment and save posts. Saved posts can be viewed on the profile page.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Technologies Used
 
-- Configure the top-level `parserOptions` property like this:
+**Frontend:** Tailwind css, React, React Router Dom, Redux Toolkit, Formik, Yup, React Icons, React QrCode Logo, classnames, Faker JS, Moment JS, Nanoid, React Helmet, Typescript
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+**Backend:** Supabase

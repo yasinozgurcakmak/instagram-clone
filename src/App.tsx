@@ -1,35 +1,52 @@
-import { Routes, Route } from "react-router-dom"
-import Home from "./pages/Home"
-import { Helmet } from "react-helmet"
-import Register from "./pages/Register"
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Routes, Route } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import supabase from "./config/supabase";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "./store/user";
-import { RootState } from "./store";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import supabase from "./config/supabase";
+import { setUser } from "./store/user";
+import Home from "./pages/Home";
+import Register from "./pages/Register";
+import Profile from "./pages/Profile";
+import QRPage from "./pages/QRPage";
+import favicon from "./assets/logo.svg";
+import PostPage from "./pages/PostPage";
+import Error from "./components/base/Error";
+import ResetPassword from "./pages/ResetPassword";
+import ResetPasswordScreen from "./pages/ResetPasswordScreen";
 
 function App() {
   const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.userSlice)
   const checkSession = async () => {
-    const user = await supabase.auth.getSession()
-    dispatch(setUser(user))
+    const currentUser = await supabase.auth.getSession()
+    dispatch(setUser(currentUser.data))
   }
-  useEffect(() => { checkSession() }, [user])
+  useEffect(() => { checkSession() }, [])
+  const queryClient = new QueryClient()
   return (
     <main>
       <Helmet>
         <title>Instagram</title>
+        <link rel="icon" type="image/x-icon" href={favicon} />
       </Helmet>
       <ToastContainer />
-      <Routes>
-        <Route path="/" element={<Home />}></Route>
-        <Route path="accounts/emailsignup" element={<Register />} />
-      </Routes>
+      <QueryClientProvider client={queryClient}>
+        <Routes>
+          <Route path="/" element={<Home />}/>
+          <Route path="accounts/emailsignup" element={<Register />} />
+          <Route path="accounts/password/reset" element={<ResetPassword />} />
+          <Route path="accounts/password/reset/passwordreset" element={<ResetPasswordScreen />} />
+          <Route path="profile/:username" element={<Profile />} />          
+          <Route path="post/:id" element={<PostPage />} />          
+          <Route path="qr/:username" element={<QRPage />} />
+          <Route path="404" element={<Error />} />          
+          <Route path="*" element={<Error />} />          
+        </Routes>
+      </QueryClientProvider>
     </main>
   )
 }
