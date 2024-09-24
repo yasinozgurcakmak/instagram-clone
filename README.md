@@ -9,9 +9,9 @@ This project is a clone of a social media application similar to Instagram. It i
 - User Registration and Login: New users can sign up, and existing users can log in. With the password reset feature, users can easily renew their passwords.
 - Profile Management: Users can update their profiles, change their profile pictures, and edit their personal information.
 - Following: Users can follow others and access the content of the people they follow.
-- Profil Görüntüleme: Bir kullanıcının profilini ziyaret ettiğinizde, o kişinin kaç takipçisi olduğunu ve kimleri takip ettiğini görebilirsiniz.
 - Posting: Users can make posts. Only their followers and themselves can see the posts.
 - Like, Comment, Save : Users can like, comment and save posts. Saved posts can be viewed on the profile page.
+- Infinite Scroll: On the homepage, if there are more than 3 posts available, the page initially loads 3 posts. As the user scrolls to the bottom of the page, an additional 3 posts are automatically loaded, providing a seamless infinite scrolling experience.
 
 ## Technologies Used
 

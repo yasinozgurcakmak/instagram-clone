@@ -146,7 +146,7 @@ const Profile = () => {
       { isLoading ? (
         <p>Loading</p>
       ) : (
-        <div className="xl:w-3/6 w-full mx-auto py-10 px-7 md:px-16 h-screen">
+        <div className="xl:w-2/3 w-full mx-auto md:ml-38 lg:ml-96 py-10 px-7 md:px-16 min-h-screen">
           <div className="flex">
             <label htmlFor="profileImageInput" className={`relative cursor-pointer min-w-20 min-h-20 max-w-20 max-h-20 ${checkOwnProfile && "group hover:opacity-35"}`}>
               <img src={profileImageUrl ? profileImageUrl : profileImage} alt={data?.name} className="rounded-full w-full h-full object-cover" />

@@ -7,10 +7,10 @@ import { useFormik } from "formik";
 import { registerSchema } from "../validation/auth";
 import supabase from "../config/supabase";
 import { toast } from "react-toastify";
-import footer from "../assets/login-footer.png";
 import logo_text from "../assets/logo_text_dark.png";
 import app_store from "../assets/app_store.png";
 import play_store from "../assets/play_store.png";
+import Submenu from "../components/block/Submenu";
 
 interface ValuesProps {
   email: string;
@@ -47,7 +47,7 @@ const Register = () => {
       }
     }
   };
-  const { handleSubmit, values, handleChange, isSubmitting, isValid, errors } = useFormik({
+  const { handleSubmit, values, handleChange, isSubmitting, errors, touched} = useFormik({
       initialValues: {
         email: "",
         name: "",
@@ -57,7 +57,6 @@ const Register = () => {
       onSubmit,
       validationSchema: registerSchema,
     });
-
   return (
     <div className="flex items-center justify-center flex-col mt-5">
       <Helmet>
@@ -68,10 +67,10 @@ const Register = () => {
           <img className="h-[51px]" src={logo_text} alt="" />
         </a>
         <p className="text-gray-400 font-semibold">
-          Sign up to see photos and videos from your friends.{" "}
+          Sign up to see photos and videos from your friends.
         </p>
         <Button onClick={() => {}}>
-          <IoLogoFacebook className="text-xl" /> Log in with Facebook{" "}
+          <IoLogoFacebook className="text-xl" /> Log in with Facebook
         </Button>
         <div className="flex items-center my-2.5 mb-3.5">
           <div className="h-px bg-gray-300 flex-1" />
@@ -85,7 +84,7 @@ const Register = () => {
           placeholder="Mobile Number or Email"
           onChange={handleChange}
           value={values.email}
-          error={errors.email}
+          error={errors.email && touched.email ? errors.email : ""}
           variant="primary"
         />
         <Input
@@ -93,7 +92,7 @@ const Register = () => {
           placeholder="Full Name"
           onChange={handleChange}
           value={values.name}
-          error={errors.name}
+          error={errors.name && touched.name ? errors.name : ""}
           variant="primary"
         />
         <Input
@@ -101,7 +100,7 @@ const Register = () => {
           placeholder="Username"
           onChange={handleChange}
           value={values.username}
-          error={errors.username}
+          error={errors.username && touched.username ? errors.username : ""}
           variant="primary"
         />
         <Input
@@ -110,76 +109,52 @@ const Register = () => {
           placeholder="Password"
           onChange={handleChange}
           value={values.password}
-          error={errors.password}
+          error={errors.password && touched.password ? errors.password : ""}
           variant="primary"
         />
         <p className="text-[#737373] text-xs">
           People who use our service may have uploaded your contact information
-          to Instagram.{" "}
-          <Link
-            to="https://www.facebook.com/help/instagram/261704639352628"
-            className="text-[#00376B]"
-          >
+          to Instagram.
+          <Link to="https://www.facebook.com/help/instagram/261704639352628" className="text-[#00376B]">
             Learn More
           </Link>
         </p>
         <p className="text-[#737373] text-xs">
-          By signing up, you agree to our{" "}
-          <Link
-            to="https://help.instagram.com/581066165581870"
-            className="text-[#00376B]"
-          >
-            Terms{" "}
+          By signing up, you agree to our
+          <Link to="https://help.instagram.com/581066165581870" className="text-[#00376B]">
+            Terms
           </Link>
-          ,{" "}
-          <Link
-            to="https://www.facebook.com/privacy/policy"
-            className="text-[#00376B]"
-          >
+          ,
+          <Link to="https://www.facebook.com/privacy/policy" className="text-[#00376B]" >
             Privacy Policy
-          </Link>{" "}
-          and{" "}
-          <Link
-            to="https://privacycenter.instagram.com/policies/cookies/"
-            className="text-[#00376B]"
-          >
+          </Link>
+          and
+          <Link to="https://privacycenter.instagram.com/policies/cookies/" className="text-[#00376B]">
             Cookies Policy
-          </Link>{" "}
+          </Link>
           .
         </p>
-        <Button
-          onClick={() => handleSubmit()}
-          disable={!isValid}
-          submitting={isSubmitting}
-        >
+        <Button onClick={() => handleSubmit()} submitting={isSubmitting}>
           Sign Up
         </Button>
       </div>
       <div className="w-[350px] py-4 border text-center mt-6">
         <p>
-          Have an account?{" "}
-          <Link to="/" className="text-[#0095F6] font-medium ">
+          Have an account?
+          <Link to="/" className="text-[#0095F6] font-medium ml-2">
             Log in
           </Link>
         </p>
       </div>
-      <div className="text-center ">
+      <div className="text-center">
         <p className="mt-5">Get the app.</p>
         <div className="flex gap-5">
-          <img
-            src={app_store}
-            alt="App Store"
-            className="w-[136px] h-10 my-[10px]"
-          />
-          <img
-            src={play_store}
-            alt="Play Store"
-            className="w-[136px] h-10 my-[10px]"
-          />
+          <img src={app_store} alt="App Store" className="w-[136px] h-10 my-[10px]"/>
+          <img src={play_store} alt="Play Store" className="w-[136px] h-10 my-[10px]"/>
         </div>
       </div>
       <div>
-        <img src={footer} alt="Footer" />
+        <Submenu/>
       </div>
     </div>
   );

@@ -9,18 +9,24 @@ import supabase from "../config/supabase";
 import { toast } from "react-toastify";
 
 const ResetPassword = () => {
+    const url = import.meta.env.VITE_URL;
     const onSubmit = async (values: {email: string}) => {
-        const { data, error } = await supabase.auth.resetPasswordForEmail(values.email, {
-            redirectTo: "http://localhost:5173/accounts/password/reset/passwordreset"
-        })
-        if(error){
-            toast.error("An error occured, please try again")
-        }
+        const {data, error} = await supabase.from("users").select("email").eq("email", values.email).single()
         if(data){
-            toast.success("A password reset link has been sent to your email")
+            const { data:resetData, error:resetError } = await supabase.auth.resetPasswordForEmail(values.email, {
+                redirectTo: `${url}/accounts/password/reset/passwordreset`
+            })
+            if(resetError){
+                toast.error("An error occured, please try again")
+            }else if(resetData){
+
+                toast.success("A password reset link has been sent to your email")
+            }
+        }else if(error){
+            toast.error("Email does not exist")
         }
     }
-    const {handleSubmit, values, handleChange, isSubmitting, isValid, errors } = useFormik({
+    const {handleSubmit, values, handleChange, isSubmitting, isValid, errors, touched } = useFormik({
         initialValues: {
             email: '',
         },
@@ -29,9 +35,9 @@ const ResetPassword = () => {
     })
     return (
         <section>
-            <div className="w-screen h-16 border-b">
+            <a href="/" className="block w-screen h-16 border-b">
                 <img src={Logo} alt="Instagram Logo" className="h-full pl-10 md:pl-96" />
-            </div>
+            </a>
             <div className="text-center flex flex-col items-center w-90 md:w-96 border p-5 relative mx-auto mt-20">
                 <div className="border rounded-full w-14 h-14 flex items-center justify-center">
                     <CiLock className="text-2xl"/> 
@@ -39,7 +45,7 @@ const ResetPassword = () => {
                 <p className="font-semibold">Trouble logging in?</p>
                 <p className="font-light">Enter your email, phone, or username and we'll send you a link to get back into your account.</p>
                 <div className="w-full my-5">
-                    <Input name="email" placeholder="Phone number, username or email" value={values.email} error={errors.email} onChange={handleChange} variant="primary" />
+                    <Input name="email" placeholder="Phone number, username or email" value={values.email} error={errors.email && touched.email ? errors.email : ""} onChange={handleChange} variant="primary" />
                     <Button onClick={() =>handleSubmit()} disable={!isValid || isSubmitting} className="font-normal mt-4">Send Login Link</Button>
                 </div>
                 <Link to="#" className="text-sm opacity-50 ">Can't reset your password</Link>

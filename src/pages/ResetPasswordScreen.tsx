@@ -22,7 +22,7 @@ const ResetPasswordScreen = () => {
             navigate("/")
         }
     }
-    const {handleSubmit, values, handleChange, isSubmitting, isValid, errors } = useFormik({
+    const {handleSubmit, values, handleChange, isSubmitting, errors, touched } = useFormik({
         initialValues: {
             email: '',
             password: '',
@@ -43,10 +43,10 @@ const ResetPasswordScreen = () => {
             <p className="font-semibold">Trouble logging in?</p>
             <p className="font-light">Enter your email, phone, or username and we'll send you a link to get back into your account.</p>
             <div className="w-full my-5">
-                <Input name="email" placeholder="Phone number, username or email" value={values.email} error={errors.email} onChange={handleChange} variant="primary" />
-                <Input name="password" placeholder="Your New Password" value={values.password} error={errors.password} onChange={handleChange} variant="primary" className="my-3"  type="password"/>
-                <Input name="rePassword" placeholder="Verify Your Password" value={values.rePassword} error={errors.rePassword} onChange={handleChange} variant="primary" type="password"/>
-                <Button onClick={() =>handleSubmit()} disable={!isValid || isSubmitting} className="font-normal mt-4">Send Login Link</Button>
+                <Input name="email" placeholder="Phone number, username or email" value={values.email} error={errors.email && touched.email ? errors.email : ""} onChange={handleChange} variant="primary" />
+                <Input name="password" placeholder="Your New Password" value={values.password} error={errors.password && touched.password ? errors.password : ""} onChange={handleChange} variant="primary" className="my-3"  type="password"/>
+                <Input name="rePassword" placeholder="Verify Your Password" value={values.rePassword} error={errors.rePassword && touched.rePassword ? errors.rePassword : ""} onChange={handleChange} variant="primary" type="password"/>
+                <Button onClick={() =>handleSubmit()} disable={ isSubmitting} className="font-normal mt-4">Send Login Link</Button>
             </div>
             <div className="flex items-center w-full my-2.5 mb-3.5"> 
                 <div className="h-px bg-gray-300 flex-1"/>

@@ -6,11 +6,11 @@ import { changeToImageAdress } from '../../utils';
 import { User } from '../../types/user';
 import { RootState } from '../../store';
 import defaultImage from '../../assets/profile.jpg';
-import sidebar_menu from '../../assets/sidebar_menu.png';
 import { useQuery } from 'react-query';
 import supabase from '../../config/supabase';
 import SuggestedUsers from '../base/SuggestedUsers';
 import { SuggestedUsersProps } from '../../types';
+import SideBarMenu from './SideBarMenu';
   
 const SideBar = () => {
     const currentUser : {session: User | null}  = useSelector((state: RootState) => state.userSlice);
@@ -47,9 +47,8 @@ const SideBar = () => {
                 ))}
             </div>
             <div className='mt-10 my-5'>
-                <img src={sidebar_menu} alt="Sidebar Menu" />
+                <SideBarMenu/>
             </div>
-            <p className='text-sm text-[#525252]'>© 2024 INSTAGRAM FROM META</p>
         </div>
     );
 };

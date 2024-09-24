@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState  } from "react";
 import { useFormik } from "formik";
 import { useMutation } from "react-query";
 import { useSelector } from "react-redux";
@@ -73,7 +73,7 @@ const CreatePost = () => {
    
     });
    
-    const { values, errors, handleChange, handleSubmit } = useFormik({
+    const { values, errors, handleChange, handleSubmit, touched } = useFormik({
         initialValues:{
             description: "",
         },
@@ -85,7 +85,7 @@ const CreatePost = () => {
         getImageURL();
     },[currentUser?.session?.user.user_metadata.profile_image]) 
     return (
-        <section className="max-w-max min-w-[340px] md:min-w-[550px]">
+        <section className="min-w-[340px] md:min-w-[550px] xl:min-w-[850px]">
             <header className="text-center py-5 text-white text-2xl">New Post</header>
             <hr />
             <div className={selectedFile ? "hidden" : "py-36 px-10 flex flex-col items-center"}>
@@ -94,14 +94,16 @@ const CreatePost = () => {
                 <input type="file" className="hidden" id="post" name="post" ref={ref} accept=".jpg,.jpeg,.png,.webp" onChange={onSelectFile} />
                 <Button onClick={onFocus}>Select From Computer</Button>
             </div>
-            <div className={selectedFile ? "flex items-center justify-center flex-col md:flex-row gap-5 w-full md:w-[500px] md:h-[350px] py-5 mx-auto " : "hidden"}>
-                {selectedFile && <img src={selectedFile.toString()} className="w-60 h-60 object-cover " />}
-                <div className="w-full">
+            <div className={selectedFile ? "flex items-center justify-center flex-col md:flex-row gap-5 w-full md:w-[500px] md:h-[350px] lg:w-full py-5 mx-auto " : "hidden"}>
+                <div className="w-full lg:px-5">
+                    {selectedFile && <img src={selectedFile.toString()} className="w-full h-60 object-cover " />}
+                </div>
+                <div className="w-full lg:px-5">
                     <div className="flex items-center gap-3">
                         <img src={profileImageUrl ? profileImageUrl : profile} alt="Profile" className="w-8 h-8 rounded-full object-cover" loading="lazy" />
                         <span className="font-semibold text-white">{currentUser && currentUser?.session?.user.user_metadata.username}</span>
                     </div>
-                    <Input type="textarea" name="description" value={values.description} onChange={handleChange} error={errors.description} placeholder="Write a caption" className="mt-5 h-20 w-full" />
+                    <Input type="textarea" name="description" value={values.description} onChange={handleChange} error={errors.description && touched.description ? errors.description : ""} placeholder="Write a caption" className="mt-5 h-20 w-full " />
                     <Button onClick={() => handleSubmit()} disable={isLoading} className="mt-10">Share</Button>
                 </div>
             </div>
