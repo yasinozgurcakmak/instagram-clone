@@ -156,7 +156,7 @@ const PostDetail = ({id}:PostDetailProps) => {
                 <div className="flex justify-between px-5 py-3">
                     <div className="flex items-center">
                         <img src={profileImageURL || ""} alt={data?.user.username || "Profile Image"} className="w-5 h-5 object-cover rounded-full" />
-                        <Link to={`profile/${data?.user.username}`} className="ml-3 font-bold"> {data?.user.username} </Link>
+                        <Link to={`/profile/${data?.user.username}`} className="ml-3 font-bold"> {data?.user.username} </Link>
                     </div>
                     <Button onClick={() =>setShowModal(!showModal)} variant="transparent" size="max"><BiDotsHorizontalRounded /></Button>
                     <Modal isOpen={showModal} onClose={closeModal}>
@@ -177,7 +177,7 @@ const PostDetail = ({id}:PostDetailProps) => {
                                 <div className="min-w-5 min-h-5 mt-[6px]">
                                     <img src={profileImageURL || ""} alt={data?.user.username || "Profile Image"} className="w-5 h-5 object-cover rounded-full" />
                                 </div>
-                                <Link to={`profile/${data?.user.username}`} className="ml-3"> <b>{data?.user.username}</b> {data?.description} </Link>
+                                <Link to={`/profile/${data?.user.username}`} className="ml-3"> <b>{data?.user.username}</b> {data?.description} </Link>
                             </div>
                         </div>
                     }

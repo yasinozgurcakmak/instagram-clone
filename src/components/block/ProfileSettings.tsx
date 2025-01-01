@@ -14,7 +14,7 @@ const ProfileSettings = ({ username,closeModal}: ProfileSettingsProps) => {
     const navigate = useNavigate();
     const signOut = async () => {
         await supabase.auth.signOut();
-        navigate("/")
+        navigate("/projects/instagram-clone")
     };
 
     return (

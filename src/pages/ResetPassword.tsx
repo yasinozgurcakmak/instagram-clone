@@ -35,9 +35,9 @@ const ResetPassword = () => {
     })
     return (
         <section>
-            <a href="/" className="block w-screen h-16 border-b">
+            <Link to="/" className="block w-screen h-16 border-b">
                 <img src={Logo} alt="Instagram Logo" className="h-full pl-10 md:pl-96" />
-            </a>
+            </Link>
             <div className="text-center flex flex-col items-center w-90 md:w-96 border p-5 relative mx-auto mt-20">
                 <div className="border rounded-full w-14 h-14 flex items-center justify-center">
                     <CiLock className="text-2xl"/> 
@@ -54,7 +54,7 @@ const ResetPassword = () => {
                     <span className="px-4 text-[13px] text-gray-500 font-semibold">OR</span>
                     <div className="h-px bg-gray-300 flex-1"/>
                 </div>
-                <Link to="accounts/emailsignup" className="text-sm mb-10">Crate new account</Link>
+                <Link to="/accounts/emailsignup" className="text-sm mb-10">Crate new account</Link>
                 <Link to="/" className="border w-full h-10 absolute bottom-0 flex items-center justify-center bg-[#FAFAFA]">Back to login</Link>
             </div>
         </section>

@@ -1,4 +1,4 @@
-# Instagram Clone Projects with React + Supabase + Tailwind
+# Instagram Clone Project with React + Supabase + Tailwind
 
 ## Project Description
 

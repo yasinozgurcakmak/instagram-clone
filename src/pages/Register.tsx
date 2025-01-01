@@ -63,9 +63,9 @@ const Register = () => {
         <title>Sign Up • Instagram</title>
       </Helmet>
       <div className="w-[350px] flex flex-col gap-y-3 text-center bg-white border p-5">
-        <a href="/" className="flex justify-center ">
+        <Link to="/" className="flex justify-center ">
           <img className="h-[51px]" src={logo_text} alt="" />
-        </a>
+        </Link>
         <p className="text-gray-400 font-semibold">
           Sign up to see photos and videos from your friends.
         </p>

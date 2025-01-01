@@ -1,21 +1,21 @@
+import { Link } from "react-router-dom";
 const Submenu = () => {
-
     return (
         <div className="text-sm text-[rgb(155,155,155)] my-5">
             <ul className="flex flex-wrap justify-center">
-                <li className="mx-2"><a href="#">Meta</a></li>
-                <li className="mx-2"><a href="#">About</a></li>
-                <li className="mx-2"><a href="#">Blog</a></li>
-                <li className="mx-2"><a href="#">Jobs</a></li>
-                <li className="mx-2"><a href="#">Help</a></li>
-                <li className="mx-2"><a href="#">API</a></li>
-                <li className="mx-2"><a href="#">Privacy</a></li>
-                <li className="mx-2"><a href="#">Terms</a></li>
-                <li className="mx-2"><a href="#">Locations</a></li>
-                <li className="mx-2"><a href="#">Instagram Lite</a></li>
-                <li className="mx-2"><a href="#">Threads</a></li>
-                <li className="mx-2"><a href="#">Contact Uploading & Non-Users</a></li>
-                <li className="mx-2"><a href="#"></a></li>
+                <li className="mx-2"><Link to="#">Meta</Link></li>
+                <li className="mx-2"><Link to="#">About</Link></li>
+                <li className="mx-2"><Link to="#">Blog</Link></li>
+                <li className="mx-2"><Link to="#">Jobs</Link></li>
+                <li className="mx-2"><Link to="#">Help</Link></li>
+                <li className="mx-2"><Link to="#">API</Link></li>
+                <li className="mx-2"><Link to="#">Privacy</Link></li>
+                <li className="mx-2"><Link to="#">Terms</Link></li>
+                <li className="mx-2"><Link to="#">Locations</Link></li>
+                <li className="mx-2"><Link to="#">Instagram Lite</Link></li>
+                <li className="mx-2"><Link to="#">Threads</Link></li>
+                <li className="mx-2"><Link to="#">Contact Uploading & Non-Users</Link></li>
+                <li className="mx-2"><Link to="#"></Link></li>
             </ul>
             <ul className="flex justify-center my-2">
                 <li className="mr-4">

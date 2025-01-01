@@ -80,7 +80,7 @@ const Profile = () => {
           toast.error("Failed to update profile image, please try again later");
         } else {
           toast.success("Profile image updated successfully");
-          setTimeout(() => { window.location.reload() }, 2000);
+          refetch();
         }
       }
     }

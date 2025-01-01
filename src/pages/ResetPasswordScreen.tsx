@@ -53,7 +53,7 @@ const ResetPasswordScreen = () => {
                 <span className="px-4 text-[13px] text-gray-500 font-semibold">OR</span>
                 <div className="h-px bg-gray-300 flex-1"/>
             </div>
-            <Link to="accounts/emailsignup" className="text-sm mb-10">Crate new account</Link>
+            <Link to="/accounts/emailsignup" className="text-sm mb-10">Crate new account</Link>
             <Link to="/" className="border w-full h-10 absolute bottom-0 flex items-center justify-center bg-[#FAFAFA]">Back to login</Link>
         </div>
     </section>

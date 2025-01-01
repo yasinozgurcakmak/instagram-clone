@@ -79,9 +79,9 @@ const Login = () => {
                 <div className="w-[350px] flex flex-col gap-y-3">
 
                     <div className="bg-white border px-[40px] pt-10 pb-6">
-                        <a href="/" className="flex justify-center mb-8">
+                        <Link to="/" className="flex justify-center mb-8">
                             <img className="h-[51px]" src={logo_text} alt="" />
-                        </a>
+                        </Link>
                         <div className="flex flex-col gap-y-1.5">
                             <Input name="email" placeholder="Phone number, username or email" value={values.email} onChange={handleChange} error={errors.email && touched.email ? errors.email : ""} variant="primary" />
                             <Input type="password" name="password" placeholder="Password" value={values.password} onChange={handleChange} error={errors.password && touched.password ? errors.password : ""} variant="primary" />
@@ -102,7 +102,7 @@ const Login = () => {
                     </div>
 
                     <div className="bg-white border p-4 text-sm text-center">
-                        Don't have an account? <a href="/accounts/emailsignup" className="font-semibold text-brand">Sign up</a>
+                        Don't have an account? <Link to="/accounts/emailsignup" className="font-semibold text-brand">Sign up</Link>
                     </div>
                     <p className="text-[14px] mt-3 text-center">Download App</p>
                     <div className="flex justify-center gap-3">

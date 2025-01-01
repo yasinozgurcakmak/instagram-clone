@@ -59,7 +59,7 @@ const SuggestedUsers = (data:SuggestedUsersProps) =>{
     })
     return (
         <div className="flex justify-between my-5">
-            <Link to={`profile/${data?.username}`} className="flex items-center">
+            <Link to={`/profile/${data?.username}`} className="flex items-center">
                 <img src={profileImageUrl} alt={data?.name}  className="w-10 h-10 rounded-full object-cover"/>
                 <p className="ml-3">{data?.username}</p>
             </Link>

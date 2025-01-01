@@ -6,7 +6,7 @@ import logo_text from "../../assets/logo_text_white.png"
 import reels from "../../assets/icons/reels.png";
 import profile from "../../assets/profile.jpg"
 import { IoIosSettings } from "react-icons/io";
-import { LuActivitySquare } from "react-icons/lu";
+import { LuSquareActivity  } from "react-icons/lu";
 import { CiBookmark } from "react-icons/ci";
 import { MdOutlineDarkMode, MdExplore } from "react-icons/md";
 import { HiMiniHome } from "react-icons/hi2";
@@ -53,7 +53,7 @@ const Menu = () => {
                 <li className="mx-3 md:mx-0"><Link to="/" className="hover:bg-gray-100/10 py-5 px-1 rounded-lg w-full flex items-center "><img src={reels} alt="Reels" className="w-6 h-6 mx-auto lg:mx-0 lg:mr-5" /><span className="hidden lg:block">Reels</span></Link></li>
                 <li className="hidden md:block"><Link to="/" className="hover:bg-gray-100/10 py-5 px-1 rounded-lg w-full flex items-center "><FaFacebookMessenger className="w-6 h-6 mx-auto lg:mx-0 lg:mr-5"/><span className="hidden lg:block">Messages</span></Link></li>
                 <li className="hidden md:block"><Link to="/" className="hover:bg-gray-100/10 py-5 px-1 rounded-lg w-full flex items-center "><FaRegHeart className="w-6 h-6 mx-auto lg:mx-0 lg:mr-5"/><span className="hidden lg:block">Notifications</span></Link></li>
-                <li className="mx-3 md:mx-0"><Link to="/" className="hover:bg-gray-100/10 py-5 px-1 rounded-lg w-full flex items-center " onClick={() => setShowModal(!showModal)}><FiPlusSquare className="w-6 h-6 mx-auto lg:mx-0 lg:mr-5"/><span className="hidden lg:block"> Create</span></Link></li>
+                <li className="mx-3 md:mx-0"><div className="hover:bg-gray-100/10 py-5 px-1 rounded-lg w-full flex items-center cursor-pointer" onClick={() => setShowModal(!showModal)}><FiPlusSquare className="w-6 h-6 mx-auto lg:mx-0 lg:mr-5"/><span className="hidden lg:block"> Create</span></div></li>
                 <li className="mx-3 md:mx-0"><Link to={`/profile/${currentUser.session?.user.user_metadata.username}`} className="hover:bg-gray-100/10 py-5 px-1 rounded-lg w-full flex items-center "><img src={profileImageUrl ? profileImageUrl : profile } alt="Profile" className="w-6 h-6 mx-auto lg:mx-0 lg:mr-5 rounded-full object-cover"/> <span className="hidden lg:block">Profile</span> </Link></li>
             </ul>
             <ul className="hidden md:flex h-full justify-end flex-col pb-5 relative mx-auto lg:mx-0">
@@ -70,7 +70,7 @@ const Menu = () => {
                 <li className={`${hidden ? "block" : "hidden"} absolute left-0 bottom-24 bg-[#262626] w-56 z-50 mx-auto py-7 rounded-lg`}>
                     <ul className="px-5 pb-5">
                         <li className="flex gap-4 items-center py-2 text-xl cursor-pointer"><IoIosSettings /> Settings</li>
-                        <li className="flex gap-4 items-center py-2 text-xl cursor-pointer"><LuActivitySquare /> Your Activity</li>
+                        <li className="flex gap-4 items-center py-2 text-xl cursor-pointer"><LuSquareActivity /> Your Activity</li>
                         <li className="flex gap-4 items-center py-2 text-xl cursor-pointer"><CiBookmark /> Saved</li>
                         <li className="flex gap-4 items-center py-2 text-xl cursor-pointer"><MdOutlineDarkMode className="rotate-45" /> Switch Theme</li>
                     </ul>
